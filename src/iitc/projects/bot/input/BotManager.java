@@ -7,22 +7,18 @@ package iitc.projects.bot.input;
  * @version 1.0
  */
 public class BotManager {
-    private BotInputHandler handler;
+    public final Mouse mouse;
+    public final Keyboard keyboard;
+    protected BotInputHandler input;
 
-    public BotManager() {
-        this(null);
+    public BotManager(BotInputHandler input) {
+        this.input = input;
+        this.mouse = new Mouse(this);
+        this.keyboard = new Keyboard(this);
     }
 
-    public BotManager(BotInputHandler handler) {
-        this.handler = handler;
-    }
-
-    public BotInputHandler getHandler() {
-        return handler;
-    }
-
-    public BotManager update(BotInputHandler handler) {
-        this.handler = handler;
+    public BotManager update(BotInputHandler input) {
+        this.input = input;
         return this;
     }
 }
