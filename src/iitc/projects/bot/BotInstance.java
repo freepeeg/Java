@@ -13,7 +13,7 @@ import java.awt.*;
  * @author Ian
  * @version 1.0
  */
-public abstract class BotInstance<B1 extends BotInstance, B2 extends BotManager, B3 extends BotPanel<B1, B2>> extends JPanel implements LoadListener<B1, B2, B3> {
+public abstract class BotInstance<B2 extends BotManager, B3 extends BotPanel<BotInstance<B2, B3>, B2>> extends JPanel implements LoadListener<BotInstance<B2, B3>, B2, B3> {
     private Applet applet;
     private Component loading;
 

@@ -36,7 +36,8 @@ public class BotPanel<B extends BotInstance, B2 extends BotManager> extends JInt
         return manager;
     }
 
-    public void listen(LoadListener... listeners) {
+    @SafeVarargs
+    public final void listen(LoadListener<B, B2, BotPanel<B, B2>>... listeners) {
         Collections.addAll(this.listeners, listeners);
     }
 
