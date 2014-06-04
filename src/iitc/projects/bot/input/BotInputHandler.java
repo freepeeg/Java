@@ -28,7 +28,7 @@ public class BotInputHandler extends InputHandler {
     }
 
     public BotInputHandler(BotInstance instance, State original) {
-        super(instance.getApplet());
+        super(instance.getComponent());
         state = original;
         this.mouse = component.getMousePosition();
     }
