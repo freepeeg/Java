@@ -37,7 +37,7 @@ public class BotInputHandler extends InputHandler {
         return state;
     }
 
-    protected void setState(State state) {
+    public void setState(State state) {
         this.state = state;
     }
 

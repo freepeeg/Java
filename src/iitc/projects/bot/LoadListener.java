@@ -1,5 +1,7 @@
 package iitc.projects.bot;
 
+import iitc.projects.bot.input.BotManager;
+
 import java.util.EventListener;
 
 /**
@@ -8,6 +10,6 @@ import java.util.EventListener;
  * @author Ian
  * @version 1.0
  */
-public interface LoadListener extends EventListener {
-    public void onLoad(BotPanel parent);
+public interface LoadListener<B1 extends BotInstance, B2 extends BotManager, B3 extends BotPanel<B1, B2>> extends EventListener {
+    public void onLoad(B3 parent);
 }

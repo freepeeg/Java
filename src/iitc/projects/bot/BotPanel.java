@@ -1,6 +1,6 @@
 package iitc.projects.bot;
 
-import iitc.projects.bot.input.BotController;
+import iitc.projects.bot.input.BotManager;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -12,10 +12,10 @@ import java.util.Collections;
  * @author Ian
  * @version 1.0
  */
-public class BotPanel<B extends BotInstance> extends JInternalFrame {
-    private final java.util.List<LoadListener> listeners;
+public class BotPanel<B extends BotInstance, B2 extends BotManager> extends JInternalFrame {
+    private final java.util.List<LoadListener<B, B2, BotPanel<B, B2>>> listeners;
     private final B instance;
-    private BotController controller;
+    private B2 manager;
 
     public BotPanel(B instance) {
         this("", instance);
@@ -29,11 +29,11 @@ public class BotPanel<B extends BotInstance> extends JInternalFrame {
         add(instance);
         pack();
         setVisible(true);
-        //TODO:setup frame with controller buttons
+        //TODO:setup frame with manager buttons
     }
 
-    public BotController getController() {
-        return controller;
+    public B2 getManager() {
+        return manager;
     }
 
     public void listen(LoadListener... listeners) {
@@ -42,11 +42,11 @@ public class BotPanel<B extends BotInstance> extends JInternalFrame {
 
     public void load() {
         instance.load(this);
-        for (LoadListener listener : listeners)
+        for (LoadListener<B, B2, BotPanel<B, B2>> listener : listeners)
             listener.onLoad(this);
     }
 
-    public void update(BotController controller) {
-        this.controller = controller;
+    public void update(B2 manager) {
+        this.manager = manager;
     }
 }

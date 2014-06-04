@@ -1,7 +1,7 @@
 package iitc.projects.bot;
 
-import iitc.projects.bot.input.BotController;
 import iitc.projects.bot.input.BotInputHandler;
+import iitc.projects.bot.input.BotManager;
 
 import javax.swing.*;
 import java.applet.Applet;
@@ -13,7 +13,7 @@ import java.awt.*;
  * @author Ian
  * @version 1.0
  */
-public abstract class BotInstance extends JPanel implements LoadListener {
+public abstract class BotInstance<B1 extends BotInstance, B2 extends BotManager, B3 extends BotPanel<B1, B2>> extends JPanel implements LoadListener<B1, B2, B3> {
     private Applet applet;
     private Component loading;
 
@@ -35,14 +35,19 @@ public abstract class BotInstance extends JPanel implements LoadListener {
         this.applet = applet;
     }
 
+    public abstract B2 getManager();
+
     @Override
-    public void onLoad(BotPanel parent) {
+    public void onLoad(B3 parent) {
         Applet applet = getApplet();
         if (applet != null) {
             if (loading != null)
                 remove(loading);
             add(applet);
-            parent.update(new BotController(new BotInputHandler(this)));
+            parent.update(getManager());
+            BotInputHandler handler = parent.getManager().getHandler();
+            System.out.println(handler.getInputState());
+            handler.setState(BotInputHandler.State.KEY);
             parent.pack();
         } else
             throw new Error("Failure to load.");
