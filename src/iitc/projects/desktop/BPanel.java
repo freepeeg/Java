@@ -11,7 +11,7 @@ import java.awt.*;
  * @author Ian
  * @version 1.0
  */
-public abstract class BPanel<C extends Component, B extends Manager, B2 extends BFrame<B>> extends JPanel implements LoadListener<BPanel<C, B, B2>, B, B2> {
+public abstract class BPanel<C extends Component, B extends Manager, B1 extends BToolBar<B>, B2 extends BFrame<B, B1>> extends JPanel implements LoadListener<B, B1, B2> {
     private C component;
     private Component loading;
 

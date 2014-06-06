@@ -10,6 +10,6 @@ import java.util.EventListener;
  * @author Ian
  * @version 1.0
  */
-public interface LoadListener<B1 extends BPanel, B2 extends Manager, B3 extends BFrame<B2>> extends EventListener {
-    public void onLoad(B3 parent);
+public interface LoadListener<B extends Manager,B1 extends BToolBar<B>, B2 extends BFrame<B,B1>> extends EventListener {
+    public void onLoad(B2 parent);
 }

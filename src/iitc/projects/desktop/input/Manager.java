@@ -17,6 +17,14 @@ public class Manager {
         this.keyboard = new Keyboard(this);
     }
 
+    public StateBasedInputHandler.State getState() {
+        return input.getInputState();
+    }
+
+    public void setState(StateBasedInputHandler.State state) {
+        input.setState(state);
+    }
+
     public Manager update(StateBasedInputHandler input) {
         this.input = input;
         return this;
