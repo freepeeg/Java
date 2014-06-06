@@ -46,7 +46,6 @@ public class BasicInputControlToolBar<M extends Manager> extends InputControlToo
                     manager.setState(StateBasedInputHandler.State.ALL);
                     break;
             }
-            System.out.println(manager.getState());
         }
     }
 
@@ -68,7 +67,6 @@ public class BasicInputControlToolBar<M extends Manager> extends InputControlToo
                     manager.setState(StateBasedInputHandler.State.NONE);
                     break;
             }
-            System.out.println(manager.getState());
         }
     }
 }
