@@ -41,20 +41,20 @@ public abstract class BFrame<B extends Manager, B2 extends BToolBar<B>> extends 
         return manager;
     }
 
-    public abstract B2 getToolBar();
+    protected abstract B2 getToolBar();
 
     @SafeVarargs
     public final void listen(LoadListener<B, B2, BFrame<B, B2>>... listeners) {
         Collections.addAll(this.listeners, listeners);
     }
 
-    public void load() {
+    protected void load() {
         instance.load(this);
         for (LoadListener<B, B2, BFrame<B, B2>> listener : listeners)
             listener.onLoad(this);
     }
 
-    public void update(B manager) {
+    protected void update(B manager) {
         this.manager = manager;
         if (toolbar != null)
             toolbar.renew(manager);
