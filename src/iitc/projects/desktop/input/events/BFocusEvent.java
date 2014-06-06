@@ -1,4 +1,4 @@
-package iitc.projects.bot.input.events;
+package iitc.projects.desktop.input.events;
 
 import java.awt.*;
 import java.awt.event.FocusEvent;
@@ -6,7 +6,7 @@ import java.awt.event.FocusEvent;
 /**
  * BFocusEvent
  * <p/>
- * Subclass of FocusEvent to differentiate between human and bot generated events
+ * Subclass of FocusEvent to differentiate between human and desktop generated events
  *
  * @author Ian
  * @version 1.0

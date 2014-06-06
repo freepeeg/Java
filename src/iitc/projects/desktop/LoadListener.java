@@ -1,6 +1,6 @@
-package iitc.projects.bot;
+package iitc.projects.desktop;
 
-import iitc.projects.bot.input.Manager;
+import iitc.projects.desktop.input.Manager;
 
 import java.util.EventListener;
 

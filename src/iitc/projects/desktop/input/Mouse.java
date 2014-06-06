@@ -1,6 +1,6 @@
-package iitc.projects.bot.input;
+package iitc.projects.desktop.input;
 
-import iitc.projects.bot.Utility;
+import iitc.projects.desktop.Utility;
 
 import java.awt.*;
 

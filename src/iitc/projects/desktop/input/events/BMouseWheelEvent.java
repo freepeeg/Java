@@ -1,4 +1,4 @@
-package iitc.projects.bot.input.events;
+package iitc.projects.desktop.input.events;
 
 import java.awt.*;
 import java.awt.event.MouseWheelEvent;
@@ -6,7 +6,7 @@ import java.awt.event.MouseWheelEvent;
 /**
  * BMouseWheelEvent
  * <p/>
- * Subclass of MouseWheelEvent to differentiate between human and bot generated events
+ * Subclass of MouseWheelEvent to differentiate between human and desktop generated events
  *
  * @author Ian
  * @version 1.0

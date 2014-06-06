@@ -1,4 +1,4 @@
-package iitc.projects.bot.input;
+package iitc.projects.desktop.input;
 
 /**
  * Manager

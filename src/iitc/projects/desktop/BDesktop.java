@@ -1,4 +1,4 @@
-package iitc.projects.bot;
+package iitc.projects.desktop;
 
 import iitc.swing.Desktop;
 

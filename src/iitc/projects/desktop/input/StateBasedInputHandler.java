@@ -1,11 +1,11 @@
-package iitc.projects.bot.input;
+package iitc.projects.desktop.input;
 
 import iitc.event.InputHandler;
-import iitc.projects.bot.BPanel;
-import iitc.projects.bot.input.events.BFocusEvent;
-import iitc.projects.bot.input.events.BKeyEvent;
-import iitc.projects.bot.input.events.BMouseEvent;
-import iitc.projects.bot.input.events.BMouseWheelEvent;
+import iitc.projects.desktop.BPanel;
+import iitc.projects.desktop.input.events.BFocusEvent;
+import iitc.projects.desktop.input.events.BKeyEvent;
+import iitc.projects.desktop.input.events.BMouseEvent;
+import iitc.projects.desktop.input.events.BMouseWheelEvent;
 import iitc.util.Random;
 import iitc.util.Time;
 
