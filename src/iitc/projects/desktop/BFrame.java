@@ -56,6 +56,7 @@ public abstract class BFrame<B extends Manager, B2 extends BToolBar<B>> extends 
 
     public void update(B manager) {
         this.manager = manager;
-        toolbar.renew(manager);
+        if (toolbar != null)
+            toolbar.renew(manager);
     }
 }
