@@ -24,12 +24,14 @@ public abstract class BFrame<B extends Manager, B2 extends BToolBar<B>> extends 
 
     public BFrame(String title, BPanel instance) {
         super(title, true, true, true, true);
-        setLayout(new BorderLayout(0,0));
+        setLayout(new BorderLayout(0, 0));
         this.listeners = new ArrayList<>();
         this.instance = instance;
         listen(instance);
-        add(instance,BorderLayout.CENTER);
-        add(getToolBar(),BorderLayout.SOUTH);
+        add(instance, BorderLayout.CENTER);
+        B2 toolbar = getToolBar();
+        if (toolbar != null)
+            add(toolbar, BorderLayout.SOUTH);
         pack();
         setVisible(true);
     }
