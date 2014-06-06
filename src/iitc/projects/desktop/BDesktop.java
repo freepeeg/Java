@@ -14,6 +14,7 @@ public class BDesktop extends Desktop<BFrame> {
 
     public BDesktop(String title) {
         super(title);
+    }
 
     @Override
     public void add(BFrame panel) {
