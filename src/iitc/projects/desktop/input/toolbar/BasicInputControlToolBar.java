@@ -1,6 +1,5 @@
 package iitc.projects.desktop.input.toolbar;
 
-import iitc.im.Condition;
 import iitc.projects.desktop.input.Manager;
 import iitc.projects.desktop.input.StateBasedInputHandler;
 
@@ -47,6 +46,7 @@ public class BasicInputControlToolBar<M extends Manager> extends InputControlToo
                     manager.setState(StateBasedInputHandler.State.ALL);
                     break;
             }
+            System.out.println(manager.getState());
         }
     }
 
@@ -68,6 +68,7 @@ public class BasicInputControlToolBar<M extends Manager> extends InputControlToo
                     manager.setState(StateBasedInputHandler.State.NONE);
                     break;
             }
+            System.out.println(manager.getState());
         }
     }
 }
