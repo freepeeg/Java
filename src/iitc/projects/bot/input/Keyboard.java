@@ -1,6 +1,6 @@
 package iitc.projects.bot.input;
 
-import iitc.projects.bot.BotUtility;
+import iitc.projects.bot.Utility;
 
 /**
  * Keyboard
@@ -8,12 +8,12 @@ import iitc.projects.bot.BotUtility;
  * @author Ian
  * @version 1.0
  */
-public class Keyboard extends BotUtility<BotManager> {
+public class Keyboard extends Utility<Manager> {
     public static char ENTER = '\n';
     public static char BACKSPACE = '\b';
     public static char TAB = '\t';
 
-    public Keyboard(BotManager manager) {
+    public Keyboard(Manager manager) {
         super(manager);
     }
 

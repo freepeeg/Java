@@ -1,6 +1,6 @@
 package iitc.projects.bot.input;
 
-import iitc.projects.bot.BotUtility;
+import iitc.projects.bot.Utility;
 
 import java.awt.*;
 
@@ -10,8 +10,8 @@ import java.awt.*;
  * @author Ian
  * @version 1.0
  */
-public class Mouse extends BotUtility<BotManager> {
-    public Mouse(BotManager manager) {
+public class Mouse extends Utility<Manager> {
+    public Mouse(Manager manager) {
         super(manager);
     }
 

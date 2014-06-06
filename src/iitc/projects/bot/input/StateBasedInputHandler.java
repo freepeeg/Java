@@ -1,11 +1,11 @@
 package iitc.projects.bot.input;
 
 import iitc.event.InputHandler;
-import iitc.projects.bot.BotInstance;
-import iitc.projects.bot.input.events.BotFocusEvent;
-import iitc.projects.bot.input.events.BotKeyEvent;
-import iitc.projects.bot.input.events.BotMouseEvent;
-import iitc.projects.bot.input.events.BotMouseWheelEvent;
+import iitc.projects.bot.BPanel;
+import iitc.projects.bot.input.events.BFocusEvent;
+import iitc.projects.bot.input.events.BKeyEvent;
+import iitc.projects.bot.input.events.BMouseEvent;
+import iitc.projects.bot.input.events.BMouseWheelEvent;
 import iitc.util.Random;
 import iitc.util.Time;
 
@@ -13,21 +13,21 @@ import java.awt.*;
 import java.awt.event.*;
 
 /**
- * BotInputHandler
+ * StateBasedInputHandler
  *
  * @author Ian
  * @version 1.0
  */
-public class BotInputHandler extends InputHandler {
+public class StateBasedInputHandler extends InputHandler {
     private static final Point OFF_SCREEN = new Point(-1, -1);
     private State state;
     private Point mouse;
 
-    public BotInputHandler(BotInstance instance) {
+    public StateBasedInputHandler(BPanel instance) {
         this(instance, State.ALL);
     }
 
-    public BotInputHandler(BotInstance instance, State original) {
+    public StateBasedInputHandler(BPanel instance, State original) {
         super(instance.getComponent());
         state = original;
         this.mouse = component.getMousePosition();
@@ -52,7 +52,7 @@ public class BotInputHandler extends InputHandler {
     }
 
     public boolean press(char keyChar) {
-        KeyEvent pressed = new BotKeyEvent(component, KeyEvent.KEY_PRESSED, System.currentTimeMillis(),
+        KeyEvent pressed = new BKeyEvent(component, KeyEvent.KEY_PRESSED, System.currentTimeMillis(),
                 0, keyChar, keyChar, KeyEvent.KEY_LOCATION_STANDARD);
         keyPressed(pressed);
         return true;
@@ -67,7 +67,7 @@ public class BotInputHandler extends InputHandler {
     }
 
     public boolean release(char keyChar) {
-        KeyEvent released = new BotKeyEvent(component, KeyEvent.KEY_RELEASED, System.currentTimeMillis(),
+        KeyEvent released = new BKeyEvent(component, KeyEvent.KEY_RELEASED, System.currentTimeMillis(),
                 0, keyChar, keyChar, KeyEvent.KEY_LOCATION_STANDARD);
         keyReleased(released);
         keyTyped(released);
@@ -75,7 +75,7 @@ public class BotInputHandler extends InputHandler {
     }
 
     public boolean press(boolean left) {
-        MouseEvent pressed = new BotMouseEvent(component, MouseEvent.MOUSE_PRESSED,
+        MouseEvent pressed = new BMouseEvent(component, MouseEvent.MOUSE_PRESSED,
                 System.currentTimeMillis(), left ? 0 : InputEvent.BUTTON3_MASK,
                 (int) getMousePosition().getX(), (int) getMousePosition().getY(), 1, false);
         mousePressed(pressed);
@@ -83,7 +83,7 @@ public class BotInputHandler extends InputHandler {
     }
 
     public boolean release(boolean left) {
-        MouseEvent released = new BotMouseEvent(component, MouseEvent.MOUSE_PRESSED,
+        MouseEvent released = new BMouseEvent(component, MouseEvent.MOUSE_PRESSED,
                 System.currentTimeMillis(), left ? 0 : InputEvent.BUTTON3_MASK,
                 (int) getMousePosition().getX(), (int) getMousePosition().getY(), 1, false);
         mouseReleased(released);
@@ -108,7 +108,7 @@ public class BotInputHandler extends InputHandler {
     }
 
     public boolean scroll(int amount) {
-        MouseWheelEvent scroll = new BotMouseWheelEvent(component, MouseEvent.MOUSE_WHEEL,
+        MouseWheelEvent scroll = new BMouseWheelEvent(component, MouseEvent.MOUSE_WHEEL,
                 System.currentTimeMillis(), MouseEvent.MOUSE_WHEEL,
                 (int) getMousePosition().getX(), (int) getMousePosition().getY(),
                 (int) getMousePosition().getX(), (int) getMousePosition().getY(),
@@ -118,60 +118,60 @@ public class BotInputHandler extends InputHandler {
     }
 
     public boolean hop(final int x, final int y) {
-        final MouseEvent me = new BotMouseEvent(component, MouseEvent.MOUSE_MOVED,
+        final MouseEvent me = new BMouseEvent(component, MouseEvent.MOUSE_MOVED,
                 System.currentTimeMillis(), 0, x, y, 0, false);
         mouseMoved(me);
         return true;
     }
 
     public void mouseClicked(MouseEvent e) {
-        if (e instanceof BotMouseEvent || (state == State.ALL || state == State.MOUSE)) {
+        if (e instanceof BMouseEvent || (state == State.ALL || state == State.MOUSE)) {
             super.mouseClicked(e);
             updateMouse(e);
         }
     }
 
     public void mousePressed(MouseEvent e) {
-        if (e instanceof BotMouseEvent || (state == State.ALL || state == State.MOUSE)) {
+        if (e instanceof BMouseEvent || (state == State.ALL || state == State.MOUSE)) {
             super.mousePressed(e);
             updateMouse(e);
         }
     }
 
     public void mouseReleased(MouseEvent e) {
-        if (e instanceof BotMouseEvent || (state == State.ALL || state == State.MOUSE)) {
+        if (e instanceof BMouseEvent || (state == State.ALL || state == State.MOUSE)) {
             super.mouseReleased(e);
             updateMouse(e);
         }
     }
 
     public void mouseEntered(MouseEvent e) {
-        if (e instanceof BotMouseEvent || (state == State.ALL || state == State.MOUSE)) {
+        if (e instanceof BMouseEvent || (state == State.ALL || state == State.MOUSE)) {
             super.mouseEntered(e);
             updateMouse(e);
         }
     }
 
     public void mouseExited(MouseEvent e) {
-        if (e instanceof BotMouseEvent || (state == State.ALL || state == State.MOUSE)) {
+        if (e instanceof BMouseEvent || (state == State.ALL || state == State.MOUSE)) {
             super.mouseExited(e);
         }
     }
 
     public void mouseWheelMoved(MouseWheelEvent e) {
-        if (e instanceof BotMouseWheelEvent || (state == State.ALL || state == State.MOUSE))
+        if (e instanceof BMouseWheelEvent || (state == State.ALL || state == State.MOUSE))
             super.mouseWheelMoved(e);
     }
 
     public void mouseDragged(MouseEvent e) {
-        if (e instanceof BotMouseEvent || (state == State.ALL || state == State.MOUSE)) {
+        if (e instanceof BMouseEvent || (state == State.ALL || state == State.MOUSE)) {
             super.mouseDragged(e);
             updateMouse(e);
         }
     }
 
     public void mouseMoved(MouseEvent e) {
-        if (e instanceof BotMouseEvent || (state == State.ALL || state == State.MOUSE)) {
+        if (e instanceof BMouseEvent || (state == State.ALL || state == State.MOUSE)) {
             super.mouseMoved(e);
             updateMouse(e);
         }
@@ -179,31 +179,31 @@ public class BotInputHandler extends InputHandler {
 
     @Override
     public void focusGained(FocusEvent e) {
-        if (e instanceof BotFocusEvent || (state == State.ALL || state == State.MOUSE))
+        if (e instanceof BFocusEvent || (state == State.ALL || state == State.MOUSE))
             super.focusGained(e);
     }
 
     @Override
     public void focusLost(FocusEvent e) {
-        if (e instanceof BotFocusEvent || (state == State.ALL || state == State.MOUSE))
+        if (e instanceof BFocusEvent || (state == State.ALL || state == State.MOUSE))
             super.focusLost(e);
     }
 
     @Override
     public void keyTyped(KeyEvent e) {
-        if (e instanceof BotKeyEvent || (state == State.ALL || state == State.KEY))
+        if (e instanceof BKeyEvent || (state == State.ALL || state == State.KEY))
             super.keyTyped(e);
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
-        if (e instanceof BotKeyEvent || (state == State.ALL || state == State.KEY))
+        if (e instanceof BKeyEvent || (state == State.ALL || state == State.KEY))
             super.keyPressed(e);
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
-        if (e instanceof BotKeyEvent || (state == State.ALL || state == State.KEY))
+        if (e instanceof BKeyEvent || (state == State.ALL || state == State.KEY))
             super.keyReleased(e);
     }
 

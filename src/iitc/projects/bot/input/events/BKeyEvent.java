@@ -4,23 +4,23 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 
 /**
- * BotKeyEvent
+ * BKeyEvent
  * <p/>
  * Subclass of KeyEvent to differentiate between human and bot generated events
  *
  * @author Ian
  * @version 1.0
  */
-public class BotKeyEvent extends KeyEvent {
-    public BotKeyEvent(Component source, int id, long when, int modifiers, int keyCode, char keyChar, int keyLocation) {
+public class BKeyEvent extends KeyEvent {
+    public BKeyEvent(Component source, int id, long when, int modifiers, int keyCode, char keyChar, int keyLocation) {
         super(source, id, when, modifiers, keyCode, keyChar, keyLocation);
     }
 
-    public BotKeyEvent(Component source, int id, long when, int modifiers, int keyCode, char keyChar) {
+    public BKeyEvent(Component source, int id, long when, int modifiers, int keyCode, char keyChar) {
         super(source, id, when, modifiers, keyCode, keyChar);
     }
 
-    public BotKeyEvent(Component source, int id, long when, int modifiers, int keyCode) {
+    public BKeyEvent(Component source, int id, long when, int modifiers, int keyCode) {
         super(source, id, when, modifiers, keyCode);
     }
 }

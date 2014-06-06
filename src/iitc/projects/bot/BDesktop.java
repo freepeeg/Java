@@ -3,16 +3,16 @@ package iitc.projects.bot;
 import iitc.swing.Desktop;
 
 /**
- * BotFrame
+ * BDesktop
  *
  * @author Ian
  * @version 1.0
  */
-public class BotFrame<B extends BotPanel> extends Desktop<B> {
-    public BotFrame() {
+public class BDesktop<B extends BFrame> extends Desktop<B> {
+    public BDesktop() {
     }
 
-    public BotFrame(String title) {
+    public BDesktop(String title) {
         super(title);
     }
 

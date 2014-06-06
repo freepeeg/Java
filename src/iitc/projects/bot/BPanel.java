@@ -1,29 +1,29 @@
 package iitc.projects.bot;
 
-import iitc.projects.bot.input.BotManager;
+import iitc.projects.bot.input.Manager;
 
 import javax.swing.*;
 import java.awt.*;
 
 /**
- * BotInstance
+ * BPanel
  *
  * @author Ian
  * @version 1.0
  */
-public abstract class BotInstance<C extends Component, B extends BotManager, B2 extends BotPanel<BotInstance<C, B, B2>, B>> extends JPanel implements LoadListener<BotInstance<C, B, B2>, B, B2> {
+public abstract class BPanel<C extends Component, B extends Manager, B2 extends BFrame<BPanel<C, B, B2>, B>> extends JPanel implements LoadListener<BPanel<C, B, B2>, B, B2> {
     private C component;
     private Component loading;
 
-    public BotInstance() {
+    public BPanel() {
     }
 
-    public BotInstance(Component loading) {
+    public BPanel(Component loading) {
         this.loading = loading;
         add(loading);
     }
 
-    protected abstract void load(BotPanel parent);
+    protected abstract void load(BFrame parent);
 
     public C getComponent() {
         return component;
