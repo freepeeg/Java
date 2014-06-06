@@ -8,16 +8,15 @@ import iitc.swing.Desktop;
  * @author Ian
  * @version 1.0
  */
-public class BDesktop<B extends BFrame> extends Desktop<B> {
+public class BDesktop extends Desktop<BFrame> {
     public BDesktop() {
     }
 
     public BDesktop(String title) {
         super(title);
-    }
 
     @Override
-    public void add(B panel) {
+    public void add(BFrame panel) {
         super.add(panel);
         panel.load();
     }
