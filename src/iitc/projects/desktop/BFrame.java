@@ -52,10 +52,10 @@ public abstract class BFrame<B extends Manager, B2 extends BToolBar<B>> extends 
         instance.load(this);
         for (LoadListener<B, B2, BFrame<B, B2>> listener : listeners)
             listener.onLoad(this);
-        toolbar.renew(manager);
     }
 
     public void update(B manager) {
         this.manager = manager;
+        toolbar.renew(manager);
     }
 }
