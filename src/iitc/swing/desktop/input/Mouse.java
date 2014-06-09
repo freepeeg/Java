@@ -1,6 +1,6 @@
-package iitc.projects.desktop.input;
+package iitc.swing.desktop.input;
 
-import iitc.projects.desktop.Utility;
+import iitc.swing.desktop.Utility;
 
 import java.awt.*;
 

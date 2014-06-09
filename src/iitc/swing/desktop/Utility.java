@@ -1,6 +1,6 @@
-package iitc.projects.desktop;
+package iitc.swing.desktop;
 
-import iitc.projects.desktop.input.Manager;
+import iitc.swing.desktop.input.Manager;
 
 /**
  * Utility

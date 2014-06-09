@@ -1,4 +1,4 @@
-package iitc.projects.desktop.input.events;
+package iitc.swing.desktop.input.events;
 
 import java.awt.*;
 import java.awt.event.FocusEvent;

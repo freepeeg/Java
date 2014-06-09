@@ -1,6 +1,6 @@
-package iitc.projects.desktop;
+package iitc.swing.desktop;
 
-import iitc.projects.desktop.input.Manager;
+import iitc.swing.desktop.input.Manager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -20,7 +20,7 @@ public abstract class BFrame<B extends Manager, B2 extends BToolBar<B>> extends 
     private B2 toolbar;
 
     public BFrame(BPanel instance) {
-        this("", instance);
+        this(null, instance);
     }
 
     public BFrame(String title, BPanel instance) {

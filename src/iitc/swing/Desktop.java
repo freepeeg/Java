@@ -30,6 +30,14 @@ public class Desktop<J extends JInternalFrame> implements WindowConstants {
         home.add(component);
     }
 
+    public DesktopManager getDesktopManager() {
+        return home.getDesktopManager();
+    }
+
+    public void setDesktopManager(DesktopManager manager) {
+        home.setDesktopManager(manager);
+    }
+
     public int getDragMode() {
         return home.getDragMode();
     }
@@ -52,17 +60,14 @@ public class Desktop<J extends JInternalFrame> implements WindowConstants {
 
     public void remove(J component) {
         home.remove(component);
-
     }
 
     public void setBackground(Color color) {
         home.setBackground(color);
-
     }
 
     public void setDefaultCloseOperation(int operation) {
         frame.setDefaultCloseOperation(operation);
-
     }
 
     public void center() {
@@ -71,7 +76,6 @@ public class Desktop<J extends JInternalFrame> implements WindowConstants {
 
     public void center(Component component) {
         frame.setLocationRelativeTo(component);
-
     }
 
     public void setStaticSize(Dimension dimension) {
@@ -79,12 +83,10 @@ public class Desktop<J extends JInternalFrame> implements WindowConstants {
         frame.setSize(dimension);
         frame.setPreferredSize(dimension);
         frame.setMaximumSize(dimension);
-
     }
 
     public void pack() {
         frame.pack();
-
     }
 
     public boolean isValid() {
@@ -97,7 +99,6 @@ public class Desktop<J extends JInternalFrame> implements WindowConstants {
 
     public void setVisible(boolean visible) {
         frame.setVisible(visible);
-
     }
 
     public Dimension getSize() {
@@ -106,7 +107,6 @@ public class Desktop<J extends JInternalFrame> implements WindowConstants {
 
     public void setSize(Dimension size) {
         frame.setSize(size);
-
     }
 
     public void setSize(int width, int height) {
@@ -131,7 +131,6 @@ public class Desktop<J extends JInternalFrame> implements WindowConstants {
 
     public void setPreferredSize(Dimension size) {
         frame.setPreferredSize(size);
-
     }
 
     public Dimension getMinimumSize() {
@@ -140,7 +139,6 @@ public class Desktop<J extends JInternalFrame> implements WindowConstants {
 
     public void setMinimumSize(Dimension size) {
         frame.setMinimumSize(size);
-
     }
 
     public Dimension getMaximumSize() {
@@ -149,7 +147,6 @@ public class Desktop<J extends JInternalFrame> implements WindowConstants {
 
     public void setMaximumSize(Dimension size) {
         frame.setMaximumSize(size);
-
     }
 
     public String getName() {
@@ -158,6 +155,5 @@ public class Desktop<J extends JInternalFrame> implements WindowConstants {
 
     public void setName(String name) {
         frame.setName(name);
-
     }
 }

@@ -1,8 +1,8 @@
-package iitc.projects.desktop;
+package iitc.swing.desktop;
 
-import iitc.projects.desktop.input.Manager;
-import iitc.projects.desktop.input.StateBasedInputHandler;
-import iitc.projects.desktop.input.toolbar.BasicInputControlToolBar;
+import iitc.swing.desktop.input.Manager;
+import iitc.swing.desktop.input.StateBasedInputHandler;
+import iitc.swing.desktop.input.toolbar.BasicInputControlToolBar;
 
 import java.applet.Applet;
 import java.awt.*;

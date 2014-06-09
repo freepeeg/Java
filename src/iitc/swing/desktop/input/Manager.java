@@ -1,4 +1,4 @@
-package iitc.projects.desktop.input;
+package iitc.swing.desktop.input;
 
 /**
  * Manager

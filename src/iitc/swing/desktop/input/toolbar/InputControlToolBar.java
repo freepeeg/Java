@@ -1,7 +1,7 @@
-package iitc.projects.desktop.input.toolbar;
+package iitc.swing.desktop.input.toolbar;
 
-import iitc.projects.desktop.BToolBar;
-import iitc.projects.desktop.input.Manager;
+import iitc.swing.desktop.BToolBar;
+import iitc.swing.desktop.input.Manager;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
