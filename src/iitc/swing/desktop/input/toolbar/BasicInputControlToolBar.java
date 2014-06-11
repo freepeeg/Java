@@ -1,7 +1,7 @@
 package iitc.swing.desktop.input.toolbar;
 
 import iitc.swing.desktop.input.Manager;
-import iitc.swing.desktop.input.StateBasedInputHandler;
+import iitc.event.StateBasedInputHandler;
 
 import javax.swing.*;
 

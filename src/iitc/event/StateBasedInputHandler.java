@@ -1,7 +1,5 @@
-package iitc.swing.desktop.input;
+package iitc.event;
 
-import iitc.event.InputHandler;
-import iitc.swing.desktop.BPanel;
 import iitc.swing.desktop.input.events.BFocusEvent;
 import iitc.swing.desktop.input.events.BKeyEvent;
 import iitc.swing.desktop.input.events.BMouseEvent;
@@ -23,12 +21,12 @@ public class StateBasedInputHandler extends InputHandler {
     private State state;
     private Point mouse;
 
-    public StateBasedInputHandler(BPanel instance) {
-        this(instance, State.ALL);
+    public StateBasedInputHandler(Component component) {
+        this(component, State.ALL);
     }
 
-    public StateBasedInputHandler(BPanel instance, State original) {
-        super(instance.getComponent());
+    public StateBasedInputHandler(Component component, State original) {
+        super(component);
         state = original;
         this.mouse = component.getMousePosition();
     }
@@ -47,7 +45,7 @@ public class StateBasedInputHandler extends InputHandler {
 
     private void updateMouse(MouseEvent e) {
         Point p = e.getPoint();
-        if (p != null && component.contains(p))
+        if (component.contains(p))
             mouse = p;
     }
 
