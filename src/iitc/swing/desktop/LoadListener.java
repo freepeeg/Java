@@ -11,5 +11,5 @@ import java.util.EventListener;
  * @version 1.0
  */
 public interface LoadListener<B extends Manager,B1 extends BToolBar<B>, B2 extends BFrame<B,B1>> extends EventListener {
-    public void onLoad(B2 parent);
+    public boolean onLoad(B2 parent);
 }

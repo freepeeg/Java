@@ -36,7 +36,7 @@ public abstract class BPanel<C extends Component, B extends Manager, B1 extends 
     public abstract B getManager();
 
     @Override
-    public void onLoad(B2 parent) {
+    public boolean onLoad(B2 parent) {
         C component = getComponent();
         if (component != null) {
             if (loading != null)
@@ -44,7 +44,8 @@ public abstract class BPanel<C extends Component, B extends Manager, B1 extends 
             add(component);
             parent.update(getManager());
             parent.pack();
-        } else
-            throw new Error("Failure to load.");
+            return true;
+        }
+        return false;
     }
 }

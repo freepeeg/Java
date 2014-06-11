@@ -1,5 +1,7 @@
 package iitc.swing.desktop.input;
 
+import iitc.event.StateBasedInputHandler;
+
 /**
  * Manager
  *
@@ -25,8 +27,7 @@ public class Manager {
         input.setState(state);
     }
 
-    public Manager update(StateBasedInputHandler input) {
+    public void update(StateBasedInputHandler input) {
         this.input = input;
-        return this;
     }
 }
