@@ -1,5 +1,6 @@
 package iitc.swing.desktop.input;
 
+import iitc.event.StateBasedInputHandler;
 import iitc.swing.desktop.Utility;
 
 /**
@@ -15,6 +16,27 @@ public class Keyboard extends Utility<Manager> {
 
     public Keyboard(Manager manager) {
         super(manager);
+    }
+
+    public void setEnabled(boolean enabled) {
+        switch (manager.getState()) {
+            case ALL:
+                if (!enabled)
+                    manager.setState(StateBasedInputHandler.State.MOUSE);
+                break;
+            case KEY:
+                if (!enabled)
+                    manager.setState(StateBasedInputHandler.State.NONE);
+                break;
+            case MOUSE:
+                if (enabled)
+                    manager.setState(StateBasedInputHandler.State.ALL);
+                break;
+            case NONE:
+                if (enabled)
+                    manager.setState(StateBasedInputHandler.State.KEY);
+                break;
+        }
     }
 
     public boolean press(char keychar) {

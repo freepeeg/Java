@@ -4,23 +4,23 @@ import java.awt.*;
 import java.awt.event.FocusEvent;
 
 /**
- * BFocusEvent
+ * FocusEventCopy
  * <p/>
  * Subclass of FocusEvent to differentiate between human and desktop generated events
  *
  * @author Ian
  * @version 1.0
  */
-public class BFocusEvent extends FocusEvent {
-    public BFocusEvent(Component source, int id, boolean temporary, Component opposite) {
+public class FocusEventCopy extends FocusEvent {
+    public FocusEventCopy(Component source, int id, boolean temporary, Component opposite) {
         super(source, id, temporary, opposite);
     }
 
-    public BFocusEvent(Component source, int id, boolean temporary) {
+    public FocusEventCopy(Component source, int id, boolean temporary) {
         super(source, id, temporary);
     }
 
-    public BFocusEvent(Component source, int id) {
+    public FocusEventCopy(Component source, int id) {
         super(source, id);
     }
 }

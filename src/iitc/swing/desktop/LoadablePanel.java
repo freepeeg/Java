@@ -11,22 +11,26 @@ import java.awt.*;
  * @author Ian
  * @version 1.0
  */
-public abstract class BPanel<C extends Component, B extends Manager, B1 extends BToolBar<B>, B2 extends BFrame<B, B1>> extends JPanel implements LoadListener<B, B1, B2> {
+public abstract class LoadablePanel<C extends Component, B extends Manager, B1 extends Toolbar<B>, B2 extends ReloadableFrame<B, B1>> extends JPanel implements LoadListener<B, B1, B2> {
     private C component;
-    private Component loading;
+    protected Component loading;
 
-    public BPanel() {
+    public LoadablePanel() {
     }
 
-    public BPanel(Component loading) {
+    public LoadablePanel(Component loading) {
         this.loading = loading;
         add(loading);
     }
 
-    protected abstract void load(BFrame parent);
+    protected abstract void load(ReloadableFrame parent);
 
     public C getComponent() {
         return component;
+    }
+
+    protected void update(B2 parent) {
+        parent.update(getManager());
     }
 
     public void setComponent(C component) {
@@ -42,8 +46,8 @@ public abstract class BPanel<C extends Component, B extends Manager, B1 extends 
             if (loading != null)
                 remove(loading);
             add(component);
-            parent.update(getManager());
             parent.pack();
+            update(parent);
             return true;
         }
         return false;

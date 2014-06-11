@@ -1,5 +1,6 @@
 package iitc.swing.desktop.input;
 
+import iitc.event.StateBasedInputHandler;
 import iitc.swing.desktop.Utility;
 
 import java.awt.*;
@@ -13,6 +14,27 @@ import java.awt.*;
 public class Mouse extends Utility<Manager> {
     public Mouse(Manager manager) {
         super(manager);
+    }
+
+    public void setEnabled(boolean enabled) {
+        switch (manager.getState()) {
+            case ALL:
+                if (!enabled)
+                    manager.setState(StateBasedInputHandler.State.KEY);
+                break;
+            case MOUSE:
+                if (!enabled)
+                    manager.setState(StateBasedInputHandler.State.NONE);
+                break;
+            case KEY:
+                if(enabled)
+                    manager.setState(StateBasedInputHandler.State.ALL);
+                break;
+            case NONE:
+                if(enabled)
+                    manager.setState(StateBasedInputHandler.State.MOUSE);
+                break;
+        }
     }
 
     private Point getPosition() {

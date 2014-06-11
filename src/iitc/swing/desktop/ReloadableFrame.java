@@ -1,8 +1,8 @@
 package iitc.swing.desktop;
 
+import iitc.event.StateListener;
 import iitc.swing.desktop.input.Manager;
 
-import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -13,19 +13,18 @@ import java.util.Collections;
  * @author Ian
  * @version 1.0
  */
-public abstract class BFrame<B extends Manager, B2 extends BToolBar<B>> extends JInternalFrame {
-    private final java.util.List<LoadListener<B, B2, BFrame<B, B2>>> listeners;
-    private final BPanel instance;
+public abstract class ReloadableFrame<B extends Manager, B2 extends Toolbar<B>> extends LoadableFrame {
+    private final java.util.List<LoadListener<B, B2, ReloadableFrame<B, B2>>> listeners;
+    private final LoadablePanel instance;
     private B manager;
     private B2 toolbar;
 
-    public BFrame(BPanel instance) {
+    public ReloadableFrame(LoadablePanel instance) {
         this(null, instance);
     }
 
-    public BFrame(String title, BPanel instance) {
-        super(title, true, true, true, true);
-        setLayout(new BorderLayout(0, 0));
+    public ReloadableFrame(String title, LoadablePanel instance) {
+        super(title);
         this.listeners = new ArrayList<>();
         this.instance = instance;
         this.toolbar = getToolBar();
@@ -44,19 +43,24 @@ public abstract class BFrame<B extends Manager, B2 extends BToolBar<B>> extends 
     protected abstract B2 getToolBar();
 
     @SafeVarargs
-    public final void listen(LoadListener<B, B2, BFrame<B, B2>>... listeners) {
+    public final void listen(LoadListener<B, B2, ReloadableFrame<B, B2>>... listeners) {
         Collections.addAll(this.listeners, listeners);
     }
 
-    protected void load() {
+    @Override
+    public void load() {
+        super.load();
         instance.load(this);
-        for (LoadListener<B, B2, BFrame<B, B2>> listener : listeners)
+        for (LoadListener<B, B2, ReloadableFrame<B, B2>> listener : listeners)
             listener.onLoad(this);
     }
 
-    protected void update(B manager) {
+    public void update(B manager) {
         this.manager = manager;
-        if (toolbar != null)
+        if (toolbar != null) {
             toolbar.renew(manager);
+            if (toolbar instanceof StateListener)
+                this.manager.addStateListeners((StateListener) toolbar);
+        }
     }
 }

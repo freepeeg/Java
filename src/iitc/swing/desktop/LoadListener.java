@@ -10,6 +10,6 @@ import java.util.EventListener;
  * @author Ian
  * @version 1.0
  */
-public interface LoadListener<B extends Manager,B1 extends BToolBar<B>, B2 extends BFrame<B,B1>> extends EventListener {
+public interface LoadListener<B extends Manager,B1 extends Toolbar<B>, B2 extends ReloadableFrame<B,B1>> extends EventListener {
     public boolean onLoad(B2 parent);
 }

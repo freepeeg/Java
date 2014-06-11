@@ -1,5 +1,7 @@
 package iitc.swing;
 
+import iitc.swing.desktop.LoadableFrame;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -9,7 +11,7 @@ import java.awt.*;
  * @author Ian
  * @version 1.0
  */
-public class Desktop<J extends JInternalFrame> implements WindowConstants {
+public class Desktop<J extends LoadableFrame> implements WindowConstants {
     private final JDesktopPane home;
     private final JFrame frame;
 
@@ -28,6 +30,7 @@ public class Desktop<J extends JInternalFrame> implements WindowConstants {
     public void add(J component) {
         component.setVisible(true);
         home.add(component);
+        component.load();
     }
 
     public DesktopManager getDesktopManager() {
@@ -44,6 +47,10 @@ public class Desktop<J extends JInternalFrame> implements WindowConstants {
 
     public void setDragMode(int mode) {
         home.setDragMode(mode);
+    }
+
+    public J selectFrame(boolean forward) {
+        return (J) home.selectFrame(forward);
     }
 
     public void setSelected(J component) {
@@ -76,6 +83,13 @@ public class Desktop<J extends JInternalFrame> implements WindowConstants {
 
     public void center(Component component) {
         frame.setLocationRelativeTo(component);
+    }
+
+    public void centerChild(J component) {
+        Dimension size = getSize();
+        Dimension childSize = component.getSize();
+        component.setLocation((size.width - childSize.width) / 2,
+                (size.height - childSize.height) / 2);
     }
 
     public void setStaticSize(Dimension dimension) {

@@ -6,30 +6,30 @@ import iitc.event.StateBasedInputHandler;
 import javax.swing.*;
 
 /**
- * BasicInputControlToolBar
+ * TextInputControlToolbar
  *
  * @author Ian
  * @version 1.0
  */
-public class BasicInputControlToolBar<M extends Manager> extends InputControlToolBar<M> {
-    public BasicInputControlToolBar(int alignment, int hgap, int vgap) {
+public class TextInputControlToolbar<M extends Manager> extends InputControlToolbar<M> {
+    public TextInputControlToolbar(int alignment, int hgap, int vgap) {
         super(alignment, hgap, vgap);
     }
 
-    public BasicInputControlToolBar(String name, int alignment, int hgap, int vgap) {
+    public TextInputControlToolbar(String name, int alignment, int hgap, int vgap) {
         super(name, alignment, hgap, vgap);
     }
 
-    public BasicInputControlToolBar(JButton mouse, JButton keyboard, int alignment, int hgap, int vgap) {
+    public TextInputControlToolbar(JButton mouse, JButton keyboard, int alignment, int hgap, int vgap) {
         super(mouse, keyboard, alignment, hgap, vgap);
     }
 
-    public BasicInputControlToolBar(JButton mouse, JButton keyboard, String name, int alignment, int hgap, int vgap) {
+    public TextInputControlToolbar(JButton mouse, JButton keyboard, String name, int alignment, int hgap, int vgap) {
         super(mouse, keyboard, name, alignment, hgap, vgap);
     }
 
     @Override
-    protected void onMouseChange(JButton button) {
+    protected void onMouseChange() {
         if (manager != null) {
             StateBasedInputHandler.State state = manager.getState();
             switch (state) {
@@ -50,7 +50,7 @@ public class BasicInputControlToolBar<M extends Manager> extends InputControlToo
     }
 
     @Override
-    protected void onKeyboardChange(JButton button) {
+    protected void onKeyboardChange() {
         if (manager != null) {
             StateBasedInputHandler.State state = manager.getState();
             switch (state) {
@@ -68,5 +68,10 @@ public class BasicInputControlToolBar<M extends Manager> extends InputControlToo
                     break;
             }
         }
+    }
+
+    @Override
+    public void onStateChange(StateBasedInputHandler.State state) {
+
     }
 }

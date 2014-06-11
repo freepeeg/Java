@@ -1,6 +1,7 @@
 package iitc.swing.desktop.input;
 
 import iitc.event.StateBasedInputHandler;
+import iitc.event.StateListener;
 
 /**
  * Manager
@@ -17,6 +18,14 @@ public class Manager {
         this.input = input;
         this.mouse = new Mouse(this);
         this.keyboard = new Keyboard(this);
+    }
+
+    public boolean addStateListeners(StateListener... listeners) {
+        return input.addStateListeners(listeners);
+    }
+
+    public boolean removeStateListeners(StateListener... listeners) {
+        return input.removeStateListeners(listeners);
     }
 
     public StateBasedInputHandler.State getState() {
