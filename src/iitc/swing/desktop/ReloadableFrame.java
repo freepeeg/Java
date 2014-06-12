@@ -15,15 +15,15 @@ import java.util.Collections;
  */
 public abstract class ReloadableFrame<B extends Manager, B2 extends Toolbar<B>> extends LoadableFrame {
     private final java.util.List<LoadListener<B, B2, ReloadableFrame<B, B2>>> listeners;
-    private final LoadablePanel instance;
+    private final LoadablePanel<?, B, B2, ReloadableFrame<B, B2>> instance;
     private B manager;
     private B2 toolbar;
 
-    public ReloadableFrame(LoadablePanel instance) {
+    public ReloadableFrame(LoadablePanel<?, B, B2, ReloadableFrame<B, B2>> instance) {
         this(null, instance);
     }
 
-    public ReloadableFrame(String title, LoadablePanel instance) {
+    public ReloadableFrame(String title, LoadablePanel<?, B, B2, ReloadableFrame<B, B2>> instance) {
         super(title);
         this.listeners = new ArrayList<>();
         this.instance = instance;
