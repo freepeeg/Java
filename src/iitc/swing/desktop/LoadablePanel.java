@@ -23,7 +23,7 @@ public abstract class LoadablePanel<C extends Component, B extends Manager, B1 e
         add(loading);
     }
 
-    protected abstract void load(ReloadableFrame parent);
+    protected abstract void load(B2 parent);
 
     public C getComponent() {
         return component;
