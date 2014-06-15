@@ -27,10 +27,16 @@ public class Desktop<J extends LoadableFrame> implements WindowConstants {
         frame.setContentPane(home);
     }
 
-    public void add(J component) {
+    public void add(final J component) {
         component.setVisible(true);
         home.add(component);
-        component.load();
+        component.moveToFront();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                component.load();
+            }
+        }).start();
     }
 
     public DesktopManager getDesktopManager() {
