@@ -14,11 +14,11 @@ public enum Primitive {
         this.identifer = identifier;
     }
 
-    public String getDescriptor() {
+    protected String getDescriptor() {
         return identifer;
     }
 
-    public String getDescriptor(int arrayLength) {
+    protected String getDescriptor(int arrayLength) {
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < arrayLength; i++) {
             builder.append("[");
