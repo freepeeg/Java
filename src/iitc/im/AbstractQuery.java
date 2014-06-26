@@ -44,10 +44,10 @@ public abstract class AbstractQuery<T extends AbstractQuery<T, T1>, T1> implemen
     }
 
     @Override
-    public T filter(Predicate<T1> predicate) {
+    public T filter(Precondition<T1> precondition) {
         List<T1> newCache = new ArrayList<>(items.size());
         for (T1 k : items)
-            if (predicate.apply(k))
+            if (precondition.condition(k))
                 newCache.add(k);
         update(newCache);
         return (T) this;

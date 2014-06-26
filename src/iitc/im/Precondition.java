@@ -6,6 +6,6 @@ package iitc.im;
  * @author Ian
  * @version 1.0
  */
-public interface Predicate<T> {
-    public boolean apply(T t);
+public interface Precondition<T> {
+    public boolean condition(T t);
 }

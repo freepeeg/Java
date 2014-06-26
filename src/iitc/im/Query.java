@@ -13,5 +13,5 @@ public interface Query<T extends Query<T, K>, K> extends FluentCollection<T, K> 
 
     public T sort(Comparator<K> comparator);
 
-    public T filter(Predicate<K> predicate);
+    public T filter(Precondition<K> precondition);
 }
