@@ -30,8 +30,10 @@ public class ToolApplicant<T extends InjectorTreeLoader> implements Tool<T> {
             BranchNode node = user.getTree().get(tool);
             if (node != null) {
                 node.setModifications(tool);
-            } else
+                node.inject();
+            } else {
                 passed = false;
+            }
         }
         return passed;
     }

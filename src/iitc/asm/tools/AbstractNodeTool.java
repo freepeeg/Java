@@ -13,6 +13,7 @@ import java.util.List;
  */
 public abstract class AbstractNodeTool implements NodeTool {
     private final List<NodeTool> children;
+    private boolean passed = true;
 
     public AbstractNodeTool(NodeTool... children) {
         this(Arrays.asList(children));
@@ -22,31 +23,22 @@ public abstract class AbstractNodeTool implements NodeTool {
         this.children = children;
     }
 
-    protected abstract String logString(BranchNode node);
-
-    protected abstract String failureString(BranchNode node);
-
     @Override
     public boolean work(BranchNode node) {
-        boolean passed = true;
+        this.passed = true;
         for (NodeTool tool : children)
-            if (tool.condition(node)) {
-                if (tool.work(node))
-                    tool.onLeave(node);
-            } else {
-                tool.onFailure(node);
+            if (!tool.condition(node) || !tool.work(node))
                 passed = false;
-            }
         return passed;
     }
 
     @Override
-    public void onFailure(BranchNode node) {
-        System.out.println(failureString(node));
+    public List<NodeTool> getChildren() {
+        return children;
     }
 
     @Override
-    public void onLeave(BranchNode node) {
-        System.out.println(logString(node));
+    public boolean passed() {
+        return passed;
     }
 }

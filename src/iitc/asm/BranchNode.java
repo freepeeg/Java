@@ -116,6 +116,13 @@ public class BranchNode extends ClassNode implements Injector {
 
     @Override
     public boolean inject() {
-        return modifications == null || modifications.work(this);
+        if (modifications == null) return true;
+        System.out.println("\'" + name + "\' Modifications");
+        boolean b = modifications.work(this);
+        System.out.println("\t" + (modifications.passed() ? modifications.logString(this) : modifications.failureString(this)));
+        for (NodeTool child : modifications.getChildren())
+            System.out.println("\t\t" + (child.passed() ? child.logString(this) : child.failureString(this)));
+        modifications = null;
+        return b;
     }
 }

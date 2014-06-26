@@ -12,6 +12,152 @@ import java.util.ListIterator;
  * @version 1.0
  */
 public class ASMUtils {
+    public static class Node {
+        public static boolean implementsClass(ClassNode node, Class<?> _interface) {
+            return implementsClass(node, Paths.get(_interface));
+        }
+
+        public static boolean implementsClass(ClassNode node, String _interface) {
+            return node.interfaces.contains(_interface);
+        }
+
+        public static class FromInsn {
+            public static FieldNode field(ClassNode parent, FieldInsnNode instance) {
+                for (FieldNode field : parent.fields)
+                    if (field.name.equals(instance.name))
+                        return field;
+                return null;
+            }
+
+            public static MethodNode method(ClassNode parent, MethodInsnNode instance) {
+                for (MethodNode method : parent.methods)
+                    if (method.name.equals(instance.name) && method.desc.equals(instance.desc))
+                        return method;
+                return null;
+            }
+        }
+    }
+
+    public static class Descriptor {
+        public static String get(Class<?> _class) {
+            return "L" + Paths.get(_class) + ";";
+        }
+
+        public static String get(Class<?> _class, int arrayLength) {
+            StringBuilder builder = new StringBuilder();
+            for (int i = 0; i < arrayLength; i++)
+                builder.append("[");
+            return builder.append(get(_class)).toString();
+        }
+
+        public static String get(Primitive primitive) {
+            return primitive.getDescriptor();
+        }
+
+        public static String get(Primitive primitive, int arrayLength) {
+            return primitive.getDescriptor(arrayLength);
+        }
+    }
+
+    public static class Method implements Opcodes {
+        public enum Access {
+            STATIC {
+                @Override
+                protected MethodNode create(ClassNode fieldParent, String methodName, String methodDesc, String fieldName, String fieldDesc, Number multiplier) {
+                    MethodNode mn = new MethodNode(ACC_PUBLIC, methodName, "()" + methodDesc, null, null);
+                    mn.instructions.add(new FieldInsnNode(GETSTATIC, fieldParent.name, fieldName, fieldDesc));
+                    if (multiplier != null) {
+                        mn.instructions.add(new LdcInsnNode(multiplier));
+                        mn.instructions.add(new InsnNode(IMUL));
+                    }
+                    mn.instructions.add(new InsnNode(getReturnOpcode(fieldDesc)));
+                    return mn;
+                }
+            }, LOCAL {
+                @Override
+                protected MethodNode create(ClassNode fieldParent, String methodName, String methodDesc, String fieldName, String fieldDesc, Number multiplier) {
+                    MethodNode mn = new MethodNode(ACC_PUBLIC, methodName, "()" + methodDesc, null, null);
+                    mn.instructions.add(new VarInsnNode(ALOAD, 0));
+                    mn.instructions.add(new FieldInsnNode(GETFIELD, fieldParent.name, fieldName, fieldDesc));
+                    if (multiplier != null) {
+                        mn.instructions.add(new LdcInsnNode(multiplier));
+                        mn.instructions.add(new InsnNode(IMUL));
+                    }
+                    mn.instructions.add(new InsnNode(getReturnOpcode(fieldDesc)));
+                    return mn;
+                }
+            };
+
+            protected MethodNode create(ClassNode fieldParent, String methodName, String methodDesc, FieldNode field) {
+                return create(fieldParent, methodName, methodDesc, field, null);
+            }
+
+            protected MethodNode create(ClassNode fieldParent, String methodName, String methodDesc, FieldNode field, Number multiplier) {
+                return create(fieldParent, methodName, methodDesc, field.name, field.desc, multiplier);
+            }
+
+            protected MethodNode create(ClassNode fieldParent, String methodName, String methodDesc, String fieldName, String fieldDesc) {
+                return create(fieldParent, methodName, methodDesc, fieldName, fieldDesc, null);
+            }
+
+            protected abstract MethodNode create(ClassNode fieldParent, String methodName, String methodDesc, String fieldName, String fieldDesc, Number multiplier);
+        }
+
+        public static MethodNode getter(Access access, ClassNode fieldParent, String methodName, String methodDesc, FieldNode field) {
+            return getter(access, fieldParent, methodName, methodDesc, field, null);
+        }
+
+        public static MethodNode getter(Access access, ClassNode fieldParent, String methodName, String methodDesc, FieldNode field, Number multiplier) {
+            return getter(access, fieldParent, methodName, methodDesc, field.name, field.desc, multiplier);
+        }
+
+        public static MethodNode getter(Access access, ClassNode fieldParent, String methodName, String methodDesc, String fieldName, String fieldDesc) {
+            return getter(access, fieldParent, methodName, methodDesc, fieldName, fieldDesc, null);
+        }
+
+        public static MethodNode getter(Access access, ClassNode fieldParent, String methodName, String methodDesc, String fieldName, String fieldDesc, Number multiplier) {
+            return access.create(fieldParent, methodName, methodDesc, fieldName, fieldDesc, multiplier);
+        }
+    }
+
+    public static class Injector {
+        public static void replaceSubclass(ClassNode target, Class<?> subclass) {
+            replaceSubclass(target, Paths.get(subclass));
+        }
+
+        public static void replaceSubclass(ClassNode target, String subclass) {
+            String replacedSuper = "";
+            if (!target.superName.equals(""))
+                replacedSuper = target.superName;
+            if (!replacedSuper.equals("")) {
+                for (final MethodNode mn : target.methods) {
+                    ListIterator<?> ili = mn.instructions.iterator();
+                    while (ili.hasNext()) {
+                        AbstractInsnNode ain = (AbstractInsnNode) ili.next();
+                        if (ain.getOpcode() == Opcodes.INVOKESPECIAL) {
+                            MethodInsnNode min = (MethodInsnNode) ain;
+                            if (min.owner.equals(replacedSuper)) {
+                                min.owner = subclass;
+                            }
+                        }
+                    }
+                }
+            }
+            target.superName = subclass;
+        }
+    }
+
+    public static class Paths {
+        public static String get(Class<?> _class) {
+            StringBuilder canvas = new StringBuilder(_class.getName());
+            for (int i = 0; i < canvas.length(); i++) {
+                char c = canvas.charAt(i);
+                if (c == '.')
+                    canvas.replace(i, i + 1, "/");
+            }
+            return canvas.toString();
+        }
+    }
 
     protected static int getOpcode(String desc) {
         desc = desc.substring(desc.indexOf("L") + 1);
@@ -76,138 +222,4 @@ public class ASMUtils {
         throw new RuntimeException("bad_return");
     }
 
-    public static class Node {
-        public static boolean implementsClass(ClassNode node, Class<?> _interface) {
-            return implementsClass(node, Paths.get(_interface));
-        }
-
-        public static boolean implementsClass(ClassNode node, String _interface) {
-            return node.interfaces.contains(_interface);
-        }
-
-        public static class FromInsn {
-            public static FieldNode field(ClassNode parent, FieldInsnNode instance) {
-                for (FieldNode field : parent.fields)
-                    if (field.name.equals(instance.name))
-                        return field;
-                return null;
-            }
-
-            public static MethodNode method(ClassNode parent, MethodInsnNode instance) {
-                for (MethodNode method : parent.methods)
-                    if (method.name.equals(instance.name) && method.desc.equals(instance.desc))
-                        return method;
-                return null;
-            }
-        }
-    }
-
-    public static class Descriptor {
-        public static String get(Class<?> _class) {
-            return "L" + Paths.get(_class) + ";";
-        }
-
-        public static String get(Class<?> _class, int arrayLength) {
-            StringBuilder builder = new StringBuilder();
-            for (int i = 0; i < arrayLength; i++)
-                builder.append("[");
-            return builder.append(get(_class)).toString();
-        }
-
-        public static String get(Primitive primitive) {
-            return primitive.getDescriptor();
-        }
-
-        public static String get(Primitive primitive, int arrayLength) {
-            return primitive.getDescriptor(arrayLength);
-        }
-    }
-
-    public static class Method implements Opcodes {
-        public static MethodNode staticVariableGetter(ClassNode fieldParent, String methodName, String methodDesc, FieldNode field) {
-            return staticVariableGetter(fieldParent, methodName, methodDesc, field, null);
-        }
-
-        public static MethodNode staticVariableGetter(ClassNode fieldParent, String methodName, String methodDesc, FieldNode field, Number multiplier) {
-            return staticVariableGetter(fieldParent, methodName, methodDesc, field.name, field.desc, multiplier);
-        }
-
-        public static MethodNode staticVariableGetter(ClassNode fieldParent, String methodName, String methodDesc, String fieldName, String fieldDesc) {
-            return staticVariableGetter(fieldParent, methodName, methodDesc, fieldName, fieldDesc, null);
-        }
-
-        public static MethodNode staticVariableGetter(ClassNode fieldParent, String methodName, String methodDesc, String fieldName, String fieldDesc, Number multiplier) {
-            MethodNode mn = new MethodNode(ACC_PUBLIC, methodName, "()" + methodDesc, null, null);
-            mn.instructions.add(new FieldInsnNode(GETSTATIC, fieldParent.name, fieldName, fieldDesc));
-            if (multiplier != null) {
-                mn.instructions.add(new LdcInsnNode(multiplier));
-                mn.instructions.add(new InsnNode(IMUL));
-            }
-            mn.instructions.add(new InsnNode(getReturnOpcode(fieldDesc)));
-            return mn;
-        }
-
-        public static MethodNode localVariableGetter(ClassNode parent, String methodName, String methodDesc, FieldNode field) {
-            return localVariableGetter(parent, methodName, methodDesc, field, null);
-        }
-
-        public static MethodNode localVariableGetter(ClassNode parent, String methodName, String methodDesc, FieldNode field, Number multiplier) {
-            return localVariableGetter(parent, methodName, methodDesc, field.name, field.desc, multiplier);
-        }
-
-        public static MethodNode localVariableGetter(ClassNode parent, String methodName, String methodDesc, String fieldName, String fieldDesc) {
-            return localVariableGetter(parent, methodName, methodDesc, fieldName, fieldDesc, null);
-        }
-
-        public static MethodNode localVariableGetter(ClassNode parent, String methodName, String methodDesc, String fieldName, String fieldDesc, Number multiplier) {
-            MethodNode mn = new MethodNode(ACC_PUBLIC, methodName, "()" + methodDesc, null, null);
-            mn.instructions.add(new VarInsnNode(ALOAD, 0));
-            mn.instructions.add(new FieldInsnNode(GETFIELD, parent.name, fieldName, fieldDesc));
-            if (multiplier != null) {
-                mn.instructions.add(new LdcInsnNode(multiplier));
-                mn.instructions.add(new InsnNode(IMUL));
-            }
-            mn.instructions.add(new InsnNode(getReturnOpcode(fieldDesc)));
-            return mn;
-        }
-    }
-
-    public static class Injector {
-        public static void replaceSubclass(ClassNode target, Class<?> subclass) {
-            replaceSubclass(target, Paths.get(subclass));
-        }
-
-        public static void replaceSubclass(ClassNode target, String subclass) {
-            String replacedSuper = "";
-            if (!target.superName.equals(""))
-                replacedSuper = target.superName;
-            if (!replacedSuper.equals("")) {
-                for (final MethodNode mn : target.methods) {
-                    ListIterator<?> ili = mn.instructions.iterator();
-                    while (ili.hasNext()) {
-                        AbstractInsnNode ain = (AbstractInsnNode) ili.next();
-                        if (ain.getOpcode() == Opcodes.INVOKESPECIAL) {
-                            MethodInsnNode min = (MethodInsnNode) ain;
-                            if (min.owner.equals(replacedSuper)) {
-                                min.owner = subclass;
-                            }
-                        }
-                    }
-                }
-            }
-            target.superName = subclass;
-        }
-    }
-
-    public static class Paths {
-        public static String get(Class<?> _class) {
-            StringBuilder canvas = new StringBuilder(_class.getName());
-            for (int i = 0; i < canvas.length(); i++) {
-                char c = canvas.charAt(i);
-                if (c == '.')
-                    canvas.replace(i, i + 1, "/");
-            }
-            return canvas.toString();
-        }
-    }
 }

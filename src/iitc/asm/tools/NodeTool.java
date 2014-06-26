@@ -3,6 +3,8 @@ package iitc.asm.tools;
 import iitc.asm.BranchNode;
 import iitc.im.Precondition;
 
+import java.util.List;
+
 /**
  * NodeTool
  *
@@ -10,7 +12,11 @@ import iitc.im.Precondition;
  * @version 1.0
  */
 public interface NodeTool extends Precondition<BranchNode>, Tool<BranchNode> {
-    public void onLeave(BranchNode node);
+    public String logString(BranchNode node);
 
-    public void onFailure(BranchNode node);
+    public String failureString(BranchNode node);
+
+    public List<NodeTool> getChildren();
+
+    public boolean passed();
 }

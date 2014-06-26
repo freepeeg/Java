@@ -60,8 +60,9 @@ public class TreeLoader extends ClassLoader {
             return getSystemClassLoader().loadClass(name);
         } catch (Exception e) {
             String key = name.replace('.', '/');
-            if (loaded.containsKey(key))
+            if (loaded.containsKey(key)) {
                 return loaded.get(key);
+            }
             else {
                 BranchNode node = tree.get(key);
                 if (node != null) {

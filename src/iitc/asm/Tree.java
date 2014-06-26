@@ -75,31 +75,15 @@ public class Tree implements Iterable<BranchNode> {
         return get(new Precondition<BranchNode>() {
             @Override
             public boolean condition(BranchNode branchNode) {
-                return branchNode.name.equals(name);
+                return branchNode != null && branchNode.name != null && branchNode.name.equals(name);
             }
         });
     }
 
     public BranchNode get(Precondition<BranchNode> precondition) {
-        return get(root, precondition);
-    }
-
-    private BranchNode get(BranchNode root, Precondition<BranchNode> precondition) {
-        if (root == null || !root.isParent())
-            return null;
-        if (precondition.condition(root))
-            return root;
-        return get(root.getChildren(), precondition);
-    }
-
-    private BranchNode get(List<BranchNode> roots, Precondition<BranchNode> precondition) {
-        if (roots == null || roots.isEmpty())
-            return null;
-        for (BranchNode root : roots) {
-            BranchNode get = get(root, precondition);
-            if (get != null)
-                return get;
-        }
+        for (BranchNode node : this)
+            if (precondition.condition(node))
+                return node;
         return null;
     }
 
@@ -140,7 +124,7 @@ public class Tree implements Iterable<BranchNode> {
         return tree;
     }
 
-    private static Map<String, BranchNode> collect(JarFile file) throws IOException {
+    protected static Map<String, BranchNode> collect(JarFile file) throws IOException {
         Map<String, BranchNode> nodes = new HashMap<>();
         Enumeration<JarEntry> entries = file.entries();
         JarEntry entry;
@@ -186,9 +170,9 @@ public class Tree implements Iterable<BranchNode> {
     @Override
     public Iterator<BranchNode> iterator() {
         final Deque<BranchNode> nodes = new ArrayDeque<>();
-        nodes.push(root);
+        for (BranchNode node : root.children)
+            nodes.push(node);
         return new Iterator<BranchNode>() {
-
             @Override
             public boolean hasNext() {
                 return !nodes.isEmpty();

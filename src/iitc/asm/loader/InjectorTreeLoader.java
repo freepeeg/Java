@@ -1,6 +1,5 @@
 package iitc.asm.loader;
 
-import iitc.asm.BranchNode;
 import iitc.asm.Tree;
 import iitc.asm.tools.Tool;
 
@@ -16,7 +15,7 @@ import java.util.List;
 public class InjectorTreeLoader extends TreeLoader implements Injector {
     private final List<Tool<InjectorTreeLoader>> tools;
 
-    private InjectorTreeLoader(Tree tree) {
+    public InjectorTreeLoader(Tree tree) {
         super(tree);
         this.tools = new ArrayList<>();
     }
@@ -33,14 +32,9 @@ public class InjectorTreeLoader extends TreeLoader implements Injector {
     public boolean inject() {
         boolean applied = true;
         for (Tool<InjectorTreeLoader> tool : tools)
-            if (!tool.work(this))
+            if (!tool.work(this)) {
                 applied = false;
-        if (!applied)
-            throw new IllegalStateException("Tree is not prepared to inject. Repair tools to proceed to node injection.");
-        boolean injected = true;
-        for (BranchNode node : this.getTree())
-            if (!node.inject())
-                injected = false;
-        return injected;
+            }
+        return applied;
     }
 }
