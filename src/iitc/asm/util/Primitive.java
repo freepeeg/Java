@@ -1,4 +1,4 @@
-package iitc.asm;
+package iitc.asm.util;
 
 /**
  * Primitive

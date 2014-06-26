@@ -1,5 +1,7 @@
-package iitc.asm;
+package iitc.asm.loader;
 
+import iitc.asm.BranchNode;
+import iitc.asm.Tree;
 import org.objectweb.asm.ClassWriter;
 
 import java.security.AllPermission;
@@ -22,7 +24,7 @@ public class TreeLoader extends ClassLoader {
     private final ProtectionDomain domain;
     private final Permissions permissions;
 
-    private TreeLoader(Tree tree) {
+    public TreeLoader(Tree tree) {
         this.tree = tree;
         this.loaded = new HashMap<>();
         Permissions permissions = new Permissions();

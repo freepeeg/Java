@@ -1,4 +1,4 @@
-package iitc.asm;
+package iitc.asm.util;
 
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.*;

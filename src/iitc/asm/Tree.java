@@ -1,14 +1,11 @@
 package iitc.asm;
 
-import iitc.im.Predicate;
+import iitc.im.Precondition;
 import org.objectweb.asm.ClassReader;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
@@ -18,7 +15,7 @@ import java.util.jar.JarFile;
  * @author Ian
  * @version 1.0
  */
-public class Tree {
+public class Tree implements Iterable<BranchNode> {
     private BranchNode root;
 
     public Tree(JarFile file) throws IOException {
@@ -75,31 +72,31 @@ public class Tree {
     }
 
     public BranchNode get(final String name) {
-        return get(new Predicate<BranchNode>() {
+        return get(new Precondition<BranchNode>() {
             @Override
-            public boolean apply(BranchNode branchNode) {
+            public boolean condition(BranchNode branchNode) {
                 return branchNode.name.equals(name);
             }
         });
     }
 
-    public BranchNode get(Predicate<BranchNode> predicate) {
-        return get(root, predicate);
+    public BranchNode get(Precondition<BranchNode> precondition) {
+        return get(root, precondition);
     }
 
-    private BranchNode get(BranchNode root, Predicate<BranchNode> predicate) {
+    private BranchNode get(BranchNode root, Precondition<BranchNode> precondition) {
         if (root == null || !root.isParent())
             return null;
-        if (predicate.apply(root))
+        if (precondition.condition(root))
             return root;
-        return get(root.getChildren(), predicate);
+        return get(root.getChildren(), precondition);
     }
 
-    private BranchNode get(List<BranchNode> roots, Predicate<BranchNode> predicate) {
+    private BranchNode get(List<BranchNode> roots, Precondition<BranchNode> precondition) {
         if (roots == null || roots.isEmpty())
             return null;
         for (BranchNode root : roots) {
-            BranchNode get = get(root, predicate);
+            BranchNode get = get(root, precondition);
             if (get != null)
                 return get;
         }
@@ -181,4 +178,34 @@ public class Tree {
         return cn;
     }
 
+    /**
+     * Returns an iterator over a set of elements of type T.
+     *
+     * @return an Iterator.
+     */
+    @Override
+    public Iterator<BranchNode> iterator() {
+        final Deque<BranchNode> nodes = new ArrayDeque<>();
+        nodes.push(root);
+        return new Iterator<BranchNode>() {
+
+            @Override
+            public boolean hasNext() {
+                return !nodes.isEmpty();
+            }
+
+            @Override
+            public BranchNode next() {
+                BranchNode node = nodes.pop();
+                for (BranchNode child : node.children)
+                    nodes.push(child);
+                return node;
+            }
+
+            @Override
+            public void remove() {
+                throw new UnsupportedOperationException();
+            }
+        };
+    }
 }
