@@ -3,6 +3,7 @@ package iitc.asm.tools;
 import iitc.asm.BranchNode;
 import iitc.asm.loader.InjectorTreeLoader;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -11,10 +12,14 @@ import java.util.List;
  * @author Ian
  * @version 1.0
  */
-public class Toolbox<T extends InjectorTreeLoader> implements Tool<T> {
+public class ToolApplicant<T extends InjectorTreeLoader> implements Tool<T> {
     private final List<NodeTool> tools;
 
-    public Toolbox(List<NodeTool> tools) {
+    public ToolApplicant(NodeTool... tools) {
+        this(Arrays.asList(tools));
+    }
+
+    public ToolApplicant(List<NodeTool> tools) {
         this.tools = tools;
     }
 
@@ -24,13 +29,9 @@ public class Toolbox<T extends InjectorTreeLoader> implements Tool<T> {
         for (NodeTool tool : tools) {
             BranchNode node = user.getTree().get(tool);
             if (node != null) {
-                if (tool.work(node))
-                    tool.onLeave(node);
-                else {
-                    tool.onFailure(node);
-                    passed = false;
-                }
-            }
+                node.setModifications(tool);
+            } else
+                passed = false;
         }
         return passed;
     }

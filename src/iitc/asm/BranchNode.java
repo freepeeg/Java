@@ -1,5 +1,7 @@
 package iitc.asm;
 
+import iitc.asm.loader.Injector;
+import iitc.asm.tools.NodeTool;
 import org.objectweb.asm.tree.ClassNode;
 
 import java.util.ArrayList;
@@ -13,9 +15,10 @@ import java.util.List;
  * @author Ian
  * @version 1.0
  */
-public class BranchNode extends ClassNode {
+public class BranchNode extends ClassNode implements Injector {
     protected final List<BranchNode> children;
     private BranchNode parent;
+    private NodeTool modifications;
 
     public BranchNode() {
         this.children = new ArrayList<>();
@@ -30,6 +33,10 @@ public class BranchNode extends ClassNode {
         if (node == this)
             return;
         this.parent = node;
+    }
+
+    public void setModifications(NodeTool tool) {
+        this.modifications = tool;
     }
 
     protected List<BranchNode> getChildren() {
@@ -105,5 +112,10 @@ public class BranchNode extends ClassNode {
     @Override
     public String toString() {
         return toString(0);
+    }
+
+    @Override
+    public boolean inject() {
+        return modifications == null || modifications.work(this);
     }
 }
