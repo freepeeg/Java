@@ -24,6 +24,9 @@ public class BorderLayout extends AbstractLayout {
     public static int CENTER = 4;
     private static final Rectangle ZERO = new Rectangle(0, 0);
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Dimension preferredLayout(RObject object, Graphics graphics) {
         RectangularShape north = this.north == null ? ZERO : this.north.getPreferredShape(graphics);
@@ -36,6 +39,9 @@ public class BorderLayout extends AbstractLayout {
         return new Dimension(maxX, maxY);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Dimension minimumLayout(RObject object, Graphics graphics) {
         RectangularShape north = this.north == null ? ZERO : this.north.getMinimumShape(graphics);
@@ -48,6 +54,9 @@ public class BorderLayout extends AbstractLayout {
         return new Dimension(maxX, maxY);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Dimension layout(RObject object, Graphics graphics) {
         RectangularShape north = this.north == null ? ZERO : this.north.getShape(graphics);
@@ -60,12 +69,17 @@ public class BorderLayout extends AbstractLayout {
         return new Dimension(maxX, maxY);
     }
 
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void doLayout(RObject object, Graphics graphics) {
         //TODO:Object resizing to fill each section with dynamic resizing with non visible/existant sections
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void removeLayoutComponent(RObject object) {
         if (object == null)
@@ -82,11 +96,17 @@ public class BorderLayout extends AbstractLayout {
             center = null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void removeLayoutComponent(Object constraint) {
         setByConstraint(constraint, null);
     }
 
+    /**
+     * Retrieves the object corresponding to the given <code>constraint</code> and assigns it to <code>newValue</code>.
+     */
     private void setByConstraint(Object constraint, RObject newValue) {
         if (constraint instanceof Integer) {
             int i = (int) constraint;
@@ -109,6 +129,9 @@ public class BorderLayout extends AbstractLayout {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void addLayoutComponent(RObject object, Object constraint) {
         setByConstraint(constraint, object);

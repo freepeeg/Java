@@ -43,6 +43,9 @@ public class VerticalFlowLayout extends AbstractLayout {
         this.vgap = vgap;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Dimension preferredLayout(RObject object, Graphics graphics) {
         Dimension dim = new Dimension(0, 0);
@@ -64,6 +67,9 @@ public class VerticalFlowLayout extends AbstractLayout {
         return dim;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Dimension minimumLayout(RObject object, Graphics graphics) {
         Dimension dim = new Dimension(0, 0);
@@ -85,6 +91,9 @@ public class VerticalFlowLayout extends AbstractLayout {
         return dim;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Dimension layout(RObject object, Graphics graphics) {
         Dimension dim = new Dimension(0, 0);
@@ -106,6 +115,9 @@ public class VerticalFlowLayout extends AbstractLayout {
         return dim;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void doLayout(RObject object, Graphics graphics) {
         //TODO:Implement multi-column support for oversized child objects
@@ -131,6 +143,5 @@ public class VerticalFlowLayout extends AbstractLayout {
             leftX += child.getWidth();
             topY -= child.getHeight();
         }
-
     }
 }

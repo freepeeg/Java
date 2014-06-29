@@ -42,7 +42,9 @@ public class FlowLayout extends AbstractLayout {
         this.hgap = hgap;
         this.vgap = vgap;
     }
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Dimension preferredLayout(RObject object, Graphics graphics) {
         Dimension dim = new Dimension(0, 0);
@@ -63,7 +65,9 @@ public class FlowLayout extends AbstractLayout {
         dim.height += insets.top + insets.bottom + vgap * 2;
         return dim;
     }
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Dimension minimumLayout(RObject object, Graphics graphics) {
         Dimension dim = new Dimension(0, 0);
@@ -83,7 +87,9 @@ public class FlowLayout extends AbstractLayout {
         dim.height += insets.top + insets.bottom + vgap * 2;
         return dim;
     }
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Dimension layout(RObject object, Graphics graphics) {
         Dimension dim = new Dimension(0, 0);
@@ -103,7 +109,9 @@ public class FlowLayout extends AbstractLayout {
         dim.height += insets.top + insets.bottom + vgap * 2;
         return dim;
     }
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void doLayout(RObject object, Graphics graphics) {
         //TODO:Implement multi-row support for oversized child objects

@@ -13,21 +13,30 @@ import java.awt.*;
  * @version 1.0
  */
 public class FreestyleLayout extends AbstractLayout {
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Dimension preferredLayout(RObject object, Graphics graphics) {
         return null;
     }
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Dimension minimumLayout(RObject object, Graphics graphics) {
         return null;
     }
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Dimension layout(RObject object, Graphics graphics) {
         return null;
     }
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void doLayout(RObject object, Graphics graphics) {
 

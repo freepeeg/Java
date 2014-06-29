@@ -38,61 +38,97 @@ public class ListEventContainer implements EventContainer {
         addComponentListeners(componentListeners);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public MouseListener[] getMouseListeners() {
         return mouseListeners.toArray(new MouseListener[mouseListeners.size()]);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void addMouseListeners(MouseListener... listeners) {
         Collections.addAll(mouseListeners, listeners);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void removeMouseListeners(MouseListener... listeners) {
         ListOperations.removeAll(mouseListeners, listeners);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public MouseMotionListener[] getMouseMotionListeners() {
         return mouseMotionListeners.toArray(new MouseMotionListener[mouseMotionListeners.size()]);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void addMouseMotionListeners(MouseMotionListener... listeners) {
         Collections.addAll(mouseMotionListeners, listeners);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void removeMouseMotionListeners(MouseMotionListener... listeners) {
         ListOperations.removeAll(mouseMotionListeners, listeners);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public MouseWheelListener[] getMouseWheelListeners() {
         return mouseWheelListeners.toArray(new MouseWheelListener[mouseWheelListeners.size()]);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void addMouseWheelListeners(MouseWheelListener... listeners) {
         Collections.addAll(mouseWheelListeners, listeners);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void removeMouseWheelListeners(MouseWheelListener... listeners) {
         ListOperations.removeAll(mouseWheelListeners, listeners);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ComponentListener[] getComponentListeners() {
         return componentListeners.toArray(new ComponentListener[componentListeners.size()]);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void addComponentListeners(ComponentListener... listeners) {
         Collections.addAll(componentListeners, listeners);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void removeComponentListeners(ComponentListener... listeners) {
         ListOperations.removeAll(componentListeners, listeners);
