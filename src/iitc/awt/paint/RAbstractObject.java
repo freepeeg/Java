@@ -69,7 +69,7 @@ public abstract class RAbstractObject implements RObject {
     public void add(RObject object, Object constraints) {
         add(object);
         manager.addLayoutComponent(object, constraints);
-
+        object.setParent(this);
     }
 
     @Override
@@ -133,7 +133,7 @@ public abstract class RAbstractObject implements RObject {
     }
 
     @Override
-    public void resizedPreferredShape(Graphics graphics, Dimension dimension) {
+    public void resizePreferredShape(Graphics graphics, Dimension dimension) {
         RectangularShape shape = preferred;
         if (shape == null)
             shape = getContainingShape();
@@ -219,10 +219,17 @@ public abstract class RAbstractObject implements RObject {
         ShapeTransform.translateShape(current, x, y);
     }
 
+    private RObject oldestRelative() {
+        RObject object = this;
+        while (object.getParent() != null)
+            object = object.getParent();
+        return object;
+    }
+
     @Override
     public void setOffsetRelativeTo(RObject component) {
         if (component == null)
-            return;
+            component = oldestRelative();
         int widthDiff = getWidth() / 2;
         int heightDiff = getHeight() / 2;
         int offsetX = component.getWidth() / 2;
@@ -238,6 +245,8 @@ public abstract class RAbstractObject implements RObject {
     @Override
     public void setParent(RObject parent) {
         RObject currentParent = getParent();
+        if (this.equals(currentParent))
+            return;
         if (currentParent != null) {
             //Remove all connection to parent
             currentParent.remove(this);
@@ -289,13 +298,15 @@ public abstract class RAbstractObject implements RObject {
 
     @Override
     public RObject getObjectAt(int x, int y) {
+        if (!contains(x, y))
+            return null;
         RObject[] objects = getObjects();
         for (int i = objects.length - 1; i >= 0; --i) {
             RObject object = objects[i];
             if (object != null && object.contains(x, y))
                 return object;
         }
-        return null;
+        return this;
     }
 
     @Override
