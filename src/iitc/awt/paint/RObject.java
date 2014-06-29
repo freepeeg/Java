@@ -60,7 +60,7 @@ public interface RObject extends Render {
 
     public void add(RObject object);
 
-    public void add(RObject object, float alignment);
+    public void add(RObject object, Object constraints);
 
     public void remove(RObject object);
 
@@ -85,6 +85,14 @@ public interface RObject extends Render {
     public Dimension getPreferredSize(Graphics graphics);
 
     public void setPreferredSize(Graphics graphics, Dimension dimension);
+
+    public void setMinimumSize(Graphics graphics, Dimension dimension);
+
+    public Dimension getMinimumSize(Graphics graphics);
+
+    public void setMaximumSize(Graphics graphics, Dimension dimension);
+
+    public Dimension getMaximumSize(Graphics graphics);
 
     public int getX();
 

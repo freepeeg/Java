@@ -1,17 +1,18 @@
 package iitc.awt.paint.layout;
 
-import iitc.awt.paint.LayoutManager;
 import iitc.awt.paint.RObject;
 
 import java.awt.*;
 
 /**
  * FreestyleLayout
+ * <p/>
+ * Draws all child components at their preset position. FreestyleLayout does not layout any components to any specific constraints. They are simply clipped within the parent object
  *
  * @author Ian
  * @version 1.0
  */
-public class FreestyleLayout implements LayoutManager{
+public class FreestyleLayout extends AbstractLayout {
     @Override
     public Dimension preferredLayout(RObject object, Graphics graphics) {
         return null;
@@ -23,8 +24,8 @@ public class FreestyleLayout implements LayoutManager{
     }
 
     @Override
-    public void revalidate(RObject object, Graphics graphics) {
-
+    public Dimension layout(RObject object, Graphics graphics) {
+        return null;
     }
 
     @Override

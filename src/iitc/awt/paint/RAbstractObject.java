@@ -8,9 +8,7 @@ import java.awt.event.ComponentListener;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelListener;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * RAbstractObject
@@ -23,14 +21,13 @@ import java.util.Map;
 public abstract class RAbstractObject implements RObject {
     private LayoutManager manager;
     private EventContainer container;
-    private Map<RObject, Float> childAlignmentMapping;
+    private java.util.List<RObject> children;
     private float alignX;
     private float alignY;
     private Insets insets;
     private boolean update;
     private boolean closable;
     private boolean closed;
-    private boolean preferredSizeSet;
     private Dimension preferredSize;
     private Color foreground;
     private Color background;
@@ -42,7 +39,7 @@ public abstract class RAbstractObject implements RObject {
 
     public RAbstractObject(LayoutManager manager) {
         this.manager = manager;
-        this.childAlignmentMapping = new HashMap<>();
+        this.children = new CopyOnWriteArrayList<>();
         this.container = new ListEventContainer();
         this.alignX = Alignment.LEFT_ALIGNMENT;
         this.alignY = Alignment.TOP_ALIGNMENT;
@@ -50,7 +47,6 @@ public abstract class RAbstractObject implements RObject {
         this.closable = true;
         this.update = false;
         this.closed = false;
-        this.preferredSizeSet = false;
         this.visible = true;
         this.background = Color.BLACK;
         this.foreground = Color.WHITE;
@@ -58,29 +54,24 @@ public abstract class RAbstractObject implements RObject {
 
     @Override
     public void add(RObject object) {
-        add(object, Alignment.LEFT_ALIGNMENT);
+        children.add(object);
     }
 
     @Override
-    public void add(RObject object, float alignment) {
-        childAlignmentMapping.put(object, alignment);
+    public void add(RObject object, Object constraints) {
+        add(object);
+        manager.addLayoutComponent(object, constraints);
+
     }
 
     @Override
     public void remove(RObject object) {
-        childAlignmentMapping.remove(object);
+        children.remove(object);
     }
 
     @Override
     public void remove(int index) {
-        Iterator<Map.Entry<RObject, Float>> objects = childAlignmentMapping.entrySet().iterator();
-        int i = 0;
-        while (objects.hasNext() && i <= index) {
-            objects.next();
-            if (i == index)
-                objects.remove();
-            i++;
-        }
+        children.remove(index);
     }
 
     @Override
@@ -115,14 +106,14 @@ public abstract class RAbstractObject implements RObject {
 
     @Override
     public Dimension getPreferredSize(Graphics graphics) {
-        if (!preferredSizeSet)
-            setPreferredSize(graphics, manager.preferredLayout(this, graphics));
+        Dimension layoutsDecision = manager.preferredLayout(this, graphics);
+        if (layoutsDecision != null)
+            setPreferredSize(graphics, layoutsDecision);
         return preferredSize;
     }
 
     @Override
     public void setPreferredSize(Graphics graphics, Dimension dimension) {
-        preferredSizeSet = true;
         preferredSize = dimension;
     }
 
@@ -144,12 +135,12 @@ public abstract class RAbstractObject implements RObject {
 
     @Override
     public RObject[] getObjects() {
-        return childAlignmentMapping.keySet().toArray(new RObject[childAlignmentMapping.size()]);
+        return children.toArray(new RObject[children.size()]);
     }
 
     @Override
     public int getObjectCount() {
-        return childAlignmentMapping.size();
+        return children.size();
     }
 
     @Override
@@ -265,11 +256,15 @@ public abstract class RAbstractObject implements RObject {
         //TODO:Make use of property listeners
         if (update) {
             setSize(getPreferredSize(graphics));
+            for (RObject object : children)
+                object.pack();
             update = false;
         }
         manager.doLayout(this, graphics);
+        graphics.setClip(getX(), getY(), getWidth(), getHeight());
         if (isVisible())
-            for (RObject object : childAlignmentMapping.keySet())
+            for (RObject object : children)
                 object.repaint(graphics);
+        graphics.setClip(null);
     }
 }
