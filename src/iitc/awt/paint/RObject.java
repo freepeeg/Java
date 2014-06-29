@@ -104,7 +104,7 @@ public interface RObject extends Render {
 
     public RObject[] getObjects();
 
-    public int getRObjectCount();
+    public int getObjectCount();
 
     public RObject getObjectAt(Point p);
 

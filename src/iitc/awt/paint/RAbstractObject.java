@@ -188,7 +188,7 @@ public class RAbstractObject implements RObject {
     }
 
     @Override
-    public int getRObjectCount() {
+    public int getObjectCount() {
         return childAlignmentMapping.size();
     }
 
