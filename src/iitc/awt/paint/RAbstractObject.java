@@ -15,7 +15,7 @@ import java.util.Map;
 /**
  * RAbstractObject
  * <p/>
- * Basic implementation of RObject. All sizing features will be left up to the subclasses of RAbstractObject.
+ * Basic implementation of RObject. All sizing/positioning features will be left up to the subclasses of RAbstractObject.
  *
  * @author Ian
  * @version 1.0
