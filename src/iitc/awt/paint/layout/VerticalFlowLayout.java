@@ -48,7 +48,7 @@ public class VerticalFlowLayout extends AbstractLayout {
         boolean noTopNeighbor = true;
         for (RObject c : object.getObjects()) {
             if (c.isVisible()) {
-                Dimension d = c.getPreferredSize(graphics);
+                Dimension d = c.getPreferredShape(graphics);
                 dim.height = Math.max(dim.height, d.height);
                 if (noTopNeighbor)
                     noTopNeighbor = false;
@@ -69,7 +69,7 @@ public class VerticalFlowLayout extends AbstractLayout {
         boolean noTopNeighbor = true;
         for (RObject c : object.getObjects()) {
             if (c.isVisible()) {
-                Dimension d = c.getMinimumSize(graphics);
+                Dimension d = c.getMinimumShape(graphics);
                 dim.height = Math.max(dim.height, d.height);
                 if (noTopNeighbor)
                     noTopNeighbor = false;
@@ -90,7 +90,7 @@ public class VerticalFlowLayout extends AbstractLayout {
         boolean noTopNeighbor = true;
         for (RObject c : object.getObjects()) {
             if (c.isVisible()) {
-                Dimension d = c.getSize(graphics);
+                Dimension d = c.getShape(graphics);
                 dim.height = Math.max(dim.height, d.height);
                 if (noTopNeighbor)
                     noTopNeighbor = false;
@@ -109,7 +109,7 @@ public class VerticalFlowLayout extends AbstractLayout {
     public void doLayout(RObject object, Graphics graphics) {
         //TODO:Implement multi-column support for oversized child objects
         Insets insets = object.getInsets();
-        Dimension size = object.getSize(graphics);
+        Dimension size = object.getShape(graphics);
         Dimension uptake = layout(object, graphics);
         //strip irrelevant gaps to get proper size
         uptake.setSize(uptake.width - (insets.left + insets.right + hgap * 2), uptake.height - (insets.top + insets.bottom + vgap * 2));

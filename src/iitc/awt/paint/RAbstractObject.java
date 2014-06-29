@@ -1,5 +1,6 @@
 package iitc.awt.paint;
 
+import iitc.awt.ShapeTransform;
 import iitc.awt.paint.event.ListEventContainer;
 import iitc.awt.paint.layout.FreestyleLayout;
 
@@ -8,6 +9,7 @@ import java.awt.event.ComponentListener;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelListener;
+import java.awt.geom.RectangularShape;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -28,11 +30,14 @@ public abstract class RAbstractObject implements RObject {
     private boolean update;
     private boolean closable;
     private boolean closed;
-    private Dimension preferredSize;
     private Color foreground;
     private Color background;
     private boolean visible;
     private RObject parent;
+    private RectangularShape current;
+    private RectangularShape preferred;
+    private RectangularShape minimum;
+    private RectangularShape maximum;
 
     public RAbstractObject() {
         this(new FreestyleLayout());
@@ -53,6 +58,8 @@ public abstract class RAbstractObject implements RObject {
         this.foreground = Color.WHITE;
     }
 
+    protected abstract RectangularShape getContainingShape();
+
     @Override
     public void add(RObject object) {
         children.add(object);
@@ -68,11 +75,12 @@ public abstract class RAbstractObject implements RObject {
     @Override
     public void remove(RObject object) {
         children.remove(object);
+        manager.removeLayoutComponent(object);
     }
 
     @Override
     public void remove(int index) {
-        children.remove(index);
+        remove(children.get(index));
     }
 
     @Override
@@ -106,33 +114,109 @@ public abstract class RAbstractObject implements RObject {
     }
 
     @Override
-    public Dimension getPreferredSize(Graphics graphics) {
-        Dimension layoutsDecision = manager.preferredLayout(this, graphics);
-        if (layoutsDecision != null)
-            setPreferredSize(graphics, layoutsDecision);
-        return preferredSize;
+    public RectangularShape getShape(Graphics graphics) {
+        return current;
     }
 
     @Override
-    public void setPreferredSize(Graphics graphics, Dimension dimension) {
-        preferredSize = dimension;
+    public void resizeCurrentShape(Dimension dimension) {
+        RectangularShape shape = current;
+        if (shape == null)
+            shape = getContainingShape();
+        if (shape.getWidth() != dimension.width && shape.getHeight() != dimension.height)
+            current = (RectangularShape) ShapeTransform.resizeRect(shape, dimension.width, dimension.height);
+    }
+
+    @Override
+    public RectangularShape getPreferredShape(Graphics graphics) {
+        return preferred;
+    }
+
+    @Override
+    public void resizedPreferredShape(Graphics graphics, Dimension dimension) {
+        RectangularShape shape = preferred;
+        if (shape == null)
+            shape = getContainingShape();
+        if (shape.getWidth() != dimension.width && shape.getHeight() != dimension.height)
+            preferred = (RectangularShape) ShapeTransform.resizeRect(shape, dimension.width, dimension.height);
+    }
+
+    @Override
+    public void resizeMinimumShape(Graphics graphics, Dimension dimension) {
+        RectangularShape shape = minimum;
+        if (shape == null)
+            shape = getContainingShape();
+        if (shape.getWidth() != dimension.width && shape.getHeight() != dimension.height)
+            minimum = (RectangularShape) ShapeTransform.resizeRect(shape, dimension.width, dimension.height);
+    }
+
+    @Override
+    public RectangularShape getMinimumShape(Graphics graphics) {
+        return minimum;
+    }
+
+    @Override
+    public void resizeMaximumShape(Graphics graphics, Dimension dimension) {
+        RectangularShape shape = maximum;
+        if (shape == null)
+            shape = getContainingShape();
+        if (shape.getWidth() != dimension.width && shape.getHeight() != dimension.height)
+            maximum = (RectangularShape) ShapeTransform.resizeRect(shape, dimension.width, dimension.height);
+    }
+
+    @Override
+    public RectangularShape getMaximumShape(Graphics graphics) {
+        return maximum;
+    }
+
+    @Override
+    public int getLocalX() {
+        return current != null ? (int) current.getX() : 0;
+    }
+
+    @Override
+    public int getLocalY() {
+        return current != null ? (int) current.getY() : 0;
     }
 
     @Override
     public int getRealX() {
         RObject parent = getParent();
-        return getOffsetX() + (parent == null ? 0 : parent.getRealX());
+        return getLocalX() + (parent == null ? 0 : parent.getRealX());
     }
 
     @Override
     public int getRealY() {
         RObject parent = getParent();
-        return getOffsetY() + (parent == null ? 0 : parent.getRealY());
+        return getLocalY() + (parent == null ? 0 : parent.getRealY());
+    }
+
+    @Override
+    public int getWidth() {
+        return current != null ? (int) current.getWidth() : 0;
+    }
+
+    @Override
+    public int getHeight() {
+        return current != null ? (int) current.getHeight() : 0;
+    }
+
+
+    @Override
+    public Point getOffset() {
+        return current == null ? new Point(0, 0) : new Point((int) current.getX(), (int) current.getY());
     }
 
     @Override
     public void setOffset(Point p) {
         setOffset(p.x, p.y);
+    }
+
+    @Override
+    public void setOffset(int x, int y) {
+        if (current == null)
+            return;
+        ShapeTransform.translateShape(current, x, y);
     }
 
     @Override
@@ -156,9 +240,36 @@ public abstract class RAbstractObject implements RObject {
         RObject currentParent = getParent();
         if (currentParent != null) {
             //Remove all connection to parent
-
+            currentParent.remove(this);
+            if (this instanceof MouseListener) {
+                MouseListener[] parentListeners = currentParent.getMouseListeners();
+                if (partOf(this, parentListeners))
+                    removeMouseListeners((MouseListener) this);
+            }
+            if (this instanceof MouseMotionListener) {
+                MouseMotionListener[] parentListeners = currentParent.getMouseMotionListeners();
+                if (partOf(this, parentListeners))
+                    removeMouseMotionListeners((MouseMotionListener) this);
+            }
+            if (this instanceof MouseWheelListener) {
+                MouseWheelListener[] parentListeners = currentParent.getMouseWheelListeners();
+                if (partOf(this, parentListeners))
+                    removeMouseWheelListeners((MouseWheelListener) this);
+            }
+            if (this instanceof ComponentListener) {
+                ComponentListener[] parentListeners = currentParent.getComponentListeners();
+                if (partOf(this, parentListeners))
+                    removeComponentListeners((ComponentListener) this);
+            }
         }
         this.parent = parent;
+    }
+
+    private boolean partOf(Object test, Object... candidates) {
+        for (Object o : candidates)
+            if (o.equals(test))
+                return true;
+        return false;
     }
 
     @Override
@@ -190,6 +301,11 @@ public abstract class RAbstractObject implements RObject {
     @Override
     public boolean contains(Point p) {
         return contains(p.x, p.y);
+    }
+
+    @Override
+    public boolean contains(int x, int y) {
+        return current.contains(x, y);
     }
 
     @Override
@@ -265,8 +381,28 @@ public abstract class RAbstractObject implements RObject {
     }
 
     @Override
+    public void addMouseListeners(MouseListener... listeners) {
+        container.addMouseListeners(listeners);
+    }
+
+    @Override
+    public void removeMouseListeners(MouseListener... listeners) {
+        container.removeMouseListeners(listeners);
+    }
+
+    @Override
     public MouseMotionListener[] getMouseMotionListeners() {
         return container.getMouseMotionListeners();
+    }
+
+    @Override
+    public void addMouseMotionListeners(MouseMotionListener... listeners) {
+        container.addMouseMotionListeners(listeners);
+    }
+
+    @Override
+    public void removeMouseMotionListeners(MouseMotionListener... listeners) {
+        container.removeMouseMotionListeners(listeners);
     }
 
     @Override
@@ -275,21 +411,43 @@ public abstract class RAbstractObject implements RObject {
     }
 
     @Override
+    public void addMouseWheelListeners(MouseWheelListener... listeners) {
+        container.addMouseWheelListeners(listeners);
+    }
+
+    @Override
+    public void removeMouseWheelListeners(MouseWheelListener... listeners) {
+        container.removeMouseWheelListeners(listeners);
+    }
+
+    @Override
     public ComponentListener[] getComponentListeners() {
         return container.getComponentListeners();
+    }
+
+    @Override
+    public void addComponentListeners(ComponentListener... listeners) {
+        container.addComponentListeners(listeners);
+    }
+
+    @Override
+    public void removeComponentListeners(ComponentListener... listeners) {
+        container.removeComponentListeners(listeners);
     }
 
     @Override
     public void repaint(Graphics graphics) {
         //TODO:Make use of property listeners
         if (update) {
-            setSize(getPreferredSize(graphics));
+            Dimension preferred = manager.preferredLayout(this, graphics);
+            if (preferred != null)
+                resizeCurrentShape(preferred);
             for (RObject object : children)
                 object.pack();
             update = false;
         }
         manager.doLayout(this, graphics);
-        graphics.setClip(getOffsetX(), getOffsetY(), getWidth(), getHeight());
+        graphics.setClip(getShape(graphics));
         if (isVisible())
             for (RObject object : children)
                 object.repaint(graphics);

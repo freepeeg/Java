@@ -1,10 +1,7 @@
 package iitc.awt.paint;
 
 import java.awt.*;
-import java.awt.event.ComponentListener;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
-import java.awt.event.MouseWheelListener;
+import java.awt.geom.RectangularShape;
 
 /**
  * RObject
@@ -12,7 +9,7 @@ import java.awt.event.MouseWheelListener;
  * @author Ian
  * @version 1.0
  */
-public interface RObject extends Render {
+public interface RObject extends EventContainer, Render {
     public static class Alignment {
         /**
          * Ease-of-use constant for <code>getAlignmentY()</code>.
@@ -78,25 +75,33 @@ public interface RObject extends Render {
 
     public void setLayout(LayoutManager manager);
 
-    public Dimension getSize(Graphics graphics);
+    public RectangularShape getShape(Graphics graphics);
 
-    public void setSize(Dimension dimension);
+    public void resizeCurrentShape(Dimension size);
 
-    public Dimension getPreferredSize(Graphics graphics);
+    public void setShape(RectangularShape shape);
 
-    public void setPreferredSize(Graphics graphics, Dimension dimension);
+    public RectangularShape getPreferredShape(Graphics graphics);
 
-    public void setMinimumSize(Graphics graphics, Dimension dimension);
+    public void resizedPreferredShape(Graphics graphics, Dimension size);
 
-    public Dimension getMinimumSize(Graphics graphics);
+    public void setPreferredShape(RectangularShape shape);
 
-    public void setMaximumSize(Graphics graphics, Dimension dimension);
+    public void resizeMinimumShape(Graphics graphics, Dimension size);
 
-    public Dimension getMaximumSize(Graphics graphics);
+    public void setMinimumShape(RectangularShape shape);
 
-    public int getOffsetX();
+    public RectangularShape getMinimumShape(Graphics graphics);
 
-    public int getOffsetY();
+    public void resizeMaximumShape(Graphics graphics, Dimension size);
+
+    public void setMaximumShape(RectangularShape shape);
+
+    public RectangularShape getMaximumShape(Graphics graphics);
+
+    public int getLocalX();
+
+    public int getLocalY();
 
     public int getRealX();
 
@@ -155,12 +160,4 @@ public interface RObject extends Render {
     public boolean isVisible();
 
     public void setVisible(boolean visible);
-
-    public MouseListener[] getMouseListeners();
-
-    public MouseMotionListener[] getMouseMotionListeners();
-
-    public MouseWheelListener[] getMouseWheelListeners();
-
-    public ComponentListener[] getComponentListeners();
 }
