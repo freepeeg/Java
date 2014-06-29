@@ -14,11 +14,13 @@ import java.util.Map;
 
 /**
  * RAbstractObject
+ * <p/>
+ * Basic implementation of RObject. All sizing features will be left up to the subclasses of RAbstractObject.
  *
  * @author Ian
  * @version 1.0
  */
-public class RAbstractObject implements RObject {
+public abstract class RAbstractObject implements RObject {
     private LayoutManager manager;
     private EventContainer container;
     private Map<RObject, Float> childAlignmentMapping;
@@ -29,18 +31,16 @@ public class RAbstractObject implements RObject {
     private boolean closable;
     private boolean closed;
     private boolean preferredSizeSet;
-    private Rectangle backgroundObject;
     private Dimension preferredSize;
     private Color foreground;
     private Color background;
     private boolean visible;
 
-    public RAbstractObject(int x, int y) {
-        this(x, y, new FreestyleLayout());
+    public RAbstractObject() {
+        this(new FreestyleLayout());
     }
 
-    public RAbstractObject(int x, int y, LayoutManager manager) {
-        this.backgroundObject = new Rectangle(x, y, 0, 0);
+    public RAbstractObject(LayoutManager manager) {
         this.manager = manager;
         this.childAlignmentMapping = new HashMap<>();
         this.container = new ListEventContainer();
@@ -114,16 +114,6 @@ public class RAbstractObject implements RObject {
     }
 
     @Override
-    public Dimension getSize(Graphics graphics) {
-        return backgroundObject.getSize();
-    }
-
-    @Override
-    public void setSize(Dimension dimension) {
-        backgroundObject.setSize(dimension);
-    }
-
-    @Override
     public Dimension getPreferredSize(Graphics graphics) {
         if (!preferredSizeSet)
             setPreferredSize(graphics, manager.preferredLayout(this, graphics));
@@ -137,38 +127,8 @@ public class RAbstractObject implements RObject {
     }
 
     @Override
-    public int getX() {
-        return backgroundObject.x;
-    }
-
-    @Override
-    public int getY() {
-        return backgroundObject.y;
-    }
-
-    @Override
-    public int getWidth() {
-        return backgroundObject.width;
-    }
-
-    @Override
-    public int getHeight() {
-        return backgroundObject.height;
-    }
-
-    @Override
-    public Point getLocation() {
-        return backgroundObject.getLocation();
-    }
-
-    @Override
     public void setLocation(Point p) {
         setLocation(p.x, p.y);
-    }
-
-    @Override
-    public void setLocation(int x, int y) {
-        backgroundObject.setLocation(x, y);
     }
 
     @Override
@@ -211,11 +171,6 @@ public class RAbstractObject implements RObject {
     @Override
     public boolean contains(Point p) {
         return contains(p.x, p.y);
-    }
-
-    @Override
-    public boolean contains(int x, int y) {
-        return backgroundObject.contains(x, y);
     }
 
     @Override
