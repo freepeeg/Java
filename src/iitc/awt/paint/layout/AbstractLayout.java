@@ -22,4 +22,14 @@ public abstract class AbstractLayout implements LayoutManager {
 
     }
 
+    @Override
+    public void removeLayoutComponent(RObject object) {
+
+    }
+
+    @Override
+    public void removeLayoutComponent(Object constraint) {
+
+    }
+
 }

@@ -94,21 +94,29 @@ public interface RObject extends Render {
 
     public Dimension getMaximumSize(Graphics graphics);
 
-    public int getX();
+    public int getOffsetX();
 
-    public int getY();
+    public int getOffsetY();
+
+    public int getRealX();
+
+    public int getRealY();
 
     public int getWidth();
 
     public int getHeight();
 
-    public Point getLocation();
+    public Point getOffset();
 
-    public void setLocation(Point p);
+    public void setOffset(Point p);
 
-    public void setLocation(int x, int y);
+    public void setOffset(int x, int y);
 
-    public void setLocationRelativeTo(RObject object);
+    public void setOffsetRelativeTo(RObject object);
+
+    public RObject getParent();
+
+    public void setParent(RObject parent);
 
     public RObject[] getObjects();
 

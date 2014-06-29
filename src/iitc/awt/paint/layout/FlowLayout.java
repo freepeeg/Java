@@ -125,7 +125,7 @@ public class FlowLayout extends AbstractLayout {
         }
         int topY = insets.top;
         for (RObject child : object.getObjects()) {
-            child.setLocation(leftX, topY);
+            child.setOffset(leftX, topY);
             leftX += child.getWidth();
             topY += child.getHeight();
         }

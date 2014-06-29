@@ -66,25 +66,50 @@ public class BorderLayout extends AbstractLayout {
     }
 
     @Override
-    public void addLayoutComponent(RObject object, Object constraints) {
-        if (constraints instanceof Integer) {
-            int i = (int) constraints;
+    public void removeLayoutComponent(RObject object) {
+        if (object == null)
+            return;
+        if (object.equals(north))
+            north = null;
+        if (object.equals(south))
+            south = null;
+        if (object.equals(east))
+            east = null;
+        if (object.equals(west))
+            west = null;
+        if (object.equals(center))
+            center = null;
+    }
+
+    @Override
+    public void removeLayoutComponent(Object constraint) {
+        setByConstraint(constraint, null);
+    }
+
+    private void setByConstraint(Object constraint, RObject newValue) {
+        if (constraint instanceof Integer) {
+            int i = (int) constraint;
             switch (i) {
                 case 0:
-                    north = object;
+                    north = newValue;
                     break;
                 case 1:
-                    south = object;
+                    south = newValue;
                     break;
                 case 2:
-                    east = object;
+                    east = newValue;
                     break;
                 case 3:
-                    west = object;
+                    west = newValue;
                     break;
                 default:
-                    center = object;
+                    center = newValue;
             }
         }
+    }
+
+    @Override
+    public void addLayoutComponent(RObject object, Object constraint) {
+        setByConstraint(constraint, object);
     }
 }

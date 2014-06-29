@@ -19,5 +19,9 @@ public interface LayoutManager {
 
     public void doLayout(RObject object, Graphics graphics);
 
-    public void addLayoutComponent(RObject object, Object constraints);
+    public void addLayoutComponent(RObject object, Object constraint);
+
+    public void removeLayoutComponent(RObject object);
+
+    public void removeLayoutComponent(Object constraints);
 }

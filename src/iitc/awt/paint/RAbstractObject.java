@@ -32,6 +32,7 @@ public abstract class RAbstractObject implements RObject {
     private Color foreground;
     private Color background;
     private boolean visible;
+    private RObject parent;
 
     public RAbstractObject() {
         this(new FreestyleLayout());
@@ -118,19 +119,46 @@ public abstract class RAbstractObject implements RObject {
     }
 
     @Override
-    public void setLocation(Point p) {
-        setLocation(p.x, p.y);
+    public int getRealX() {
+        RObject parent = getParent();
+        return getOffsetX() + (parent == null ? 0 : parent.getRealX());
     }
 
     @Override
-    public void setLocationRelativeTo(RObject component) {
+    public int getRealY() {
+        RObject parent = getParent();
+        return getOffsetY() + (parent == null ? 0 : parent.getRealY());
+    }
+
+    @Override
+    public void setOffset(Point p) {
+        setOffset(p.x, p.y);
+    }
+
+    @Override
+    public void setOffsetRelativeTo(RObject component) {
         if (component == null)
             return;
         int widthDiff = getWidth() / 2;
         int heightDiff = getHeight() / 2;
         int offsetX = component.getWidth() / 2;
         int offsetY = component.getHeight() / 2;
-        setLocation(offsetX - widthDiff, offsetY - heightDiff);
+        setOffset(offsetX - widthDiff, offsetY - heightDiff);
+    }
+
+    @Override
+    public RObject getParent() {
+        return parent;
+    }
+
+    @Override
+    public void setParent(RObject parent) {
+        RObject currentParent = getParent();
+        if (currentParent != null) {
+            //Remove all connection to parent
+
+        }
+        this.parent = parent;
     }
 
     @Override
@@ -261,7 +289,7 @@ public abstract class RAbstractObject implements RObject {
             update = false;
         }
         manager.doLayout(this, graphics);
-        graphics.setClip(getX(), getY(), getWidth(), getHeight());
+        graphics.setClip(getOffsetX(), getOffsetY(), getWidth(), getHeight());
         if (isVisible())
             for (RObject object : children)
                 object.repaint(graphics);
