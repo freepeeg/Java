@@ -183,7 +183,7 @@ public class RAbstractObject implements RObject {
     }
 
     @Override
-    public RObject[] getRObjects() {
+    public RObject[] getObjects() {
         return childAlignmentMapping.keySet().toArray(new RObject[childAlignmentMapping.size()]);
     }
 
@@ -193,13 +193,13 @@ public class RAbstractObject implements RObject {
     }
 
     @Override
-    public RObject getRObjectAt(Point p) {
-        return getRObjectAt(p.x, p.y);
+    public RObject getObjectAt(Point p) {
+        return getObjectAt(p.x, p.y);
     }
 
     @Override
-    public RObject getRObjectAt(int x, int y) {
-        RObject[] objects = getRObjects();
+    public RObject getObjectAt(int x, int y) {
+        RObject[] objects = getObjects();
         for (int i = objects.length - 1; i >= 0; --i) {
             RObject object = objects[i];
             if (object != null && object.contains(x, y))
@@ -255,6 +255,7 @@ public class RAbstractObject implements RObject {
 
     @Override
     public void setClosed(boolean closed) {
+        //TODO:Throw proper exceptions
         if (closable)
             this.closed = closed;
     }
@@ -306,8 +307,11 @@ public class RAbstractObject implements RObject {
 
     @Override
     public void repaint(Graphics graphics) {
-        if (update)
+        //TODO:Make use of property listeners
+        if (update) {
             setSize(getPreferredSize(graphics));
+            update = false;
+        }
         manager.doLayout(this, graphics);
         if (isVisible())
             for (RObject object : childAlignmentMapping.keySet())

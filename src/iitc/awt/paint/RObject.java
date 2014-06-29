@@ -102,13 +102,13 @@ public interface RObject extends Render {
 
     public void setLocationRelativeTo(RObject object);
 
-    public RObject[] getRObjects();
+    public RObject[] getObjects();
 
     public int getRObjectCount();
 
-    public RObject getRObjectAt(Point p);
+    public RObject getObjectAt(Point p);
 
-    public RObject getRObjectAt(int x, int y);
+    public RObject getObjectAt(int x, int y);
 
     public boolean contains(Point p);
 
