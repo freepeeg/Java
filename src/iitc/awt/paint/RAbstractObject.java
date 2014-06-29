@@ -309,7 +309,8 @@ public class RAbstractObject implements RObject {
         if (update)
             setSize(getPreferredSize(graphics));
         manager.doLayout(this, graphics);
-        for (RObject object : childAlignmentMapping.keySet())
-            object.repaint(graphics);
+        if (isVisible())
+            for (RObject object : childAlignmentMapping.keySet())
+                object.repaint(graphics);
     }
 }
