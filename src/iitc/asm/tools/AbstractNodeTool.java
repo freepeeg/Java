@@ -1,8 +1,11 @@
 package iitc.asm.tools;
 
 import iitc.asm.BranchNode;
+import iitc.asm.loader.InjectorTreeLoader;
+import iitc.im.ListOperations;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -13,23 +16,31 @@ import java.util.List;
  */
 public abstract class AbstractNodeTool implements NodeTool {
     private final List<NodeTool> children;
-    private boolean passed = true;
+    protected boolean passed = true;
+    protected final InjectorTreeLoader loader;
+    private BranchNode current;
 
-    public AbstractNodeTool(NodeTool... children) {
-        this(Arrays.asList(children));
+    public AbstractNodeTool(InjectorTreeLoader loader) {
+        this.loader = loader;
+        this.children = new ArrayList<>();
     }
 
-    public AbstractNodeTool(List<NodeTool> children) {
-        this.children = children;
+    public boolean add(NodeTool... tools) {
+        return Collections.addAll(this.children, tools);
+    }
+
+    public boolean remove(NodeTool... tools) {
+        return ListOperations.removeAll(this.children, tools);
     }
 
     @Override
     public boolean work(BranchNode node) {
-        this.passed = true;
-        for (NodeTool tool : children)
+        for (NodeTool tool : children) {
+            tool.setCurrent(current());
             if (!tool.condition(node) || !tool.work(node))
-                passed = false;
-        return passed;
+                tool.setPassed(false);
+        }
+        return true;
     }
 
     @Override
@@ -41,4 +52,21 @@ public abstract class AbstractNodeTool implements NodeTool {
     public boolean passed() {
         return passed;
     }
+
+    @Override
+    public void setPassed(boolean passed) {
+        this.passed = passed;
+        setCurrent(null);
+    }
+
+    @Override
+    public BranchNode current() {
+        return current;
+    }
+
+    @Override
+    public void setCurrent(BranchNode node) {
+        this.current = node;
+    }
+
 }

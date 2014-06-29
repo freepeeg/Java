@@ -25,16 +25,16 @@ public class ToolApplicant<T extends InjectorTreeLoader> implements Tool<T> {
 
     @Override
     public boolean work(T user) {
-        boolean passed = true;
         for (NodeTool tool : tools) {
             BranchNode node = user.getTree().get(tool);
             if (node != null) {
+                tool.setCurrent(node);
                 node.setModifications(tool);
                 node.inject();
             } else {
-                passed = false;
+                tool.setPassed(false);
             }
         }
-        return passed;
+        return true;
     }
 }

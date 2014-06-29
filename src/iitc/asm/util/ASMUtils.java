@@ -20,34 +20,53 @@ public class ASMUtils {
         public static boolean implementsClass(ClassNode node, String _interface) {
             return node.interfaces.contains(_interface);
         }
-
-        public static class FromInsn {
-            public static FieldNode field(ClassNode parent, FieldInsnNode instance) {
-                for (FieldNode field : parent.fields)
-                    if (field.name.equals(instance.name))
-                        return field;
-                return null;
-            }
-
-            public static MethodNode method(ClassNode parent, MethodInsnNode instance) {
-                for (MethodNode method : parent.methods)
-                    if (method.name.equals(instance.name) && method.desc.equals(instance.desc))
-                        return method;
-                return null;
-            }
-        }
     }
 
     public static class Descriptor {
-        public static String get(Class<?> _class) {
-            return "L" + Paths.get(_class) + ";";
+        public static String strip(String descriptor) {
+            if (descriptor == null)
+                return "";
+            int count = arrayCount(descriptor);
+            String s = count > 0 ? descriptor.replaceAll("\\[", "") : descriptor;
+            if (s.length() < 3)
+                return "";
+            return s.substring(1, s.length() - 1);
         }
 
-        public static String get(Class<?> _class, int arrayLength) {
+        public static int arrayCount(String descriptor) {
+            int count = 0;
+            for (char c : descriptor.toCharArray())
+                if (c == '[')
+                    count++;
+            return count;
+        }
+
+        public static String get(String object) {
+            return "L" + object + ";";
+        }
+
+        public static String get(String object, int arrayLength) {
             StringBuilder builder = new StringBuilder();
             for (int i = 0; i < arrayLength; i++)
                 builder.append("[");
-            return builder.append(get(_class)).toString();
+            return builder.append(get(object)).toString();
+        }
+
+        public static String get(ClassNode node) {
+            return get(node.name);
+        }
+
+        public static String get(ClassNode node, int arrayLength) {
+            return get(node.name, arrayLength);
+        }
+
+
+        public static String get(Class<?> _class) {
+            return get(Paths.get(_class));
+        }
+
+        public static String get(Class<?> _class, int arrayLength) {
+            return get(Paths.get(_class), arrayLength);
         }
 
         public static String get(Primitive primitive) {
@@ -63,7 +82,7 @@ public class ASMUtils {
         public enum Access {
             STATIC {
                 @Override
-                protected MethodNode create(ClassNode fieldParent, String methodName, String methodDesc, String fieldName, String fieldDesc, Number multiplier) {
+                public MethodNode create(ClassNode fieldParent, String methodName, String methodDesc, String fieldName, String fieldDesc, Number multiplier) {
                     MethodNode mn = new MethodNode(ACC_PUBLIC, methodName, "()" + methodDesc, null, null);
                     mn.instructions.add(new FieldInsnNode(GETSTATIC, fieldParent.name, fieldName, fieldDesc));
                     if (multiplier != null) {
@@ -75,7 +94,7 @@ public class ASMUtils {
                 }
             }, LOCAL {
                 @Override
-                protected MethodNode create(ClassNode fieldParent, String methodName, String methodDesc, String fieldName, String fieldDesc, Number multiplier) {
+                public MethodNode create(ClassNode fieldParent, String methodName, String methodDesc, String fieldName, String fieldDesc, Number multiplier) {
                     MethodNode mn = new MethodNode(ACC_PUBLIC, methodName, "()" + methodDesc, null, null);
                     mn.instructions.add(new VarInsnNode(ALOAD, 0));
                     mn.instructions.add(new FieldInsnNode(GETFIELD, fieldParent.name, fieldName, fieldDesc));
@@ -88,35 +107,19 @@ public class ASMUtils {
                 }
             };
 
-            protected MethodNode create(ClassNode fieldParent, String methodName, String methodDesc, FieldNode field) {
+            public MethodNode create(ClassNode fieldParent, String methodName, String methodDesc, FieldNode field) {
                 return create(fieldParent, methodName, methodDesc, field, null);
             }
 
-            protected MethodNode create(ClassNode fieldParent, String methodName, String methodDesc, FieldNode field, Number multiplier) {
+            public MethodNode create(ClassNode fieldParent, String methodName, String methodDesc, FieldNode field, Number multiplier) {
                 return create(fieldParent, methodName, methodDesc, field.name, field.desc, multiplier);
             }
 
-            protected MethodNode create(ClassNode fieldParent, String methodName, String methodDesc, String fieldName, String fieldDesc) {
+            public MethodNode create(ClassNode fieldParent, String methodName, String methodDesc, String fieldName, String fieldDesc) {
                 return create(fieldParent, methodName, methodDesc, fieldName, fieldDesc, null);
             }
 
-            protected abstract MethodNode create(ClassNode fieldParent, String methodName, String methodDesc, String fieldName, String fieldDesc, Number multiplier);
-        }
-
-        public static MethodNode getter(Access access, ClassNode fieldParent, String methodName, String methodDesc, FieldNode field) {
-            return getter(access, fieldParent, methodName, methodDesc, field, null);
-        }
-
-        public static MethodNode getter(Access access, ClassNode fieldParent, String methodName, String methodDesc, FieldNode field, Number multiplier) {
-            return getter(access, fieldParent, methodName, methodDesc, field.name, field.desc, multiplier);
-        }
-
-        public static MethodNode getter(Access access, ClassNode fieldParent, String methodName, String methodDesc, String fieldName, String fieldDesc) {
-            return getter(access, fieldParent, methodName, methodDesc, fieldName, fieldDesc, null);
-        }
-
-        public static MethodNode getter(Access access, ClassNode fieldParent, String methodName, String methodDesc, String fieldName, String fieldDesc, Number multiplier) {
-            return access.create(fieldParent, methodName, methodDesc, fieldName, fieldDesc, multiplier);
+            public abstract MethodNode create(ClassNode fieldParent, String methodName, String methodDesc, String fieldName, String fieldDesc, Number multiplier);
         }
     }
 

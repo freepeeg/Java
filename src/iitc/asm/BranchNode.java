@@ -2,7 +2,8 @@ package iitc.asm;
 
 import iitc.asm.loader.Injector;
 import iitc.asm.tools.NodeTool;
-import org.objectweb.asm.tree.ClassNode;
+import iitc.asm.util.ASMUtils;
+import org.objectweb.asm.tree.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -109,6 +110,32 @@ public class BranchNode extends ClassNode implements Injector {
         return builder.toString();
     }
 
+    public FieldNode fromInsn(FieldInsnNode field) {
+        for (FieldNode node : fields)
+            if (node.name.equals(field.name) && node.desc.equals(field.desc))
+                return node;
+        return null;
+    }
+
+    public MethodNode fromInsn(MethodInsnNode field) {
+        for (MethodNode node : methods)
+            if (node.name.equals(field.name) && node.desc.equals(field.desc))
+                return node;
+        return null;
+    }
+
+    public boolean inherits(Class<?> _class) {
+        return inherits(ASMUtils.Paths.get(_class));
+    }
+
+    public boolean inherits(String _class) {
+        return interfaces.contains(_class);
+    }
+
+    public InstructionList generateList(final MethodNode method) {
+        return new InstructionList(method);
+    }
+
     @Override
     public String toString() {
         return toString(0);
@@ -117,11 +144,16 @@ public class BranchNode extends ClassNode implements Injector {
     @Override
     public boolean inject() {
         if (modifications == null) return true;
-        System.out.println("\'" + name + "\' Modifications");
+        System.out.println("\'" + name + "\' Analysis");
         boolean b = modifications.work(this);
         System.out.println("\t" + (modifications.passed() ? modifications.logString(this) : modifications.failureString(this)));
-        for (NodeTool child : modifications.getChildren())
-            System.out.println("\t\t" + (child.passed() ? child.logString(this) : child.failureString(this)));
+        for (NodeTool child : modifications.getChildren()) {
+            if (child.passed())
+                System.out.println("\t\t" + child.logString(this));
+            else
+                System.out.println("\t\t" + child.failureString(this));
+
+        }
         modifications = null;
         return b;
     }

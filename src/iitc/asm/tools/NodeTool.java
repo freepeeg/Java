@@ -19,4 +19,11 @@ public interface NodeTool extends Precondition<BranchNode>, Tool<BranchNode> {
     public List<NodeTool> getChildren();
 
     public boolean passed();
+
+    public void setPassed(boolean passed);
+
+    public BranchNode current();
+
+    public void setCurrent(BranchNode node);
+
 }

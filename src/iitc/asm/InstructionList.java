@@ -37,7 +37,7 @@ public class InstructionList implements Opcodes, Iterable<AbstractInsnNode> {
     };
     protected final InsnList instructions;
 
-    public InstructionList(MethodNode method) {
+    protected InstructionList(MethodNode method) {
         this(method.instructions);
     }
 
