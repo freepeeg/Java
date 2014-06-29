@@ -105,6 +105,7 @@ public class FlowLayout extends AbstractLayout {
 
     @Override
     public void doLayout(RObject object, Graphics graphics) {
+        //TODO:Implement multi-row support for oversized child objects
         Insets insets = object.getInsets();
         Dimension size = object.getSize(graphics);
         Dimension uptake = layout(object, graphics);
