@@ -3,6 +3,7 @@ package iitc.awt.paint.layout;
 import iitc.awt.paint.RObject;
 
 import java.awt.*;
+import java.awt.geom.RectangularShape;
 
 /**
  * BorderLayout
@@ -21,41 +22,41 @@ public class BorderLayout extends AbstractLayout {
     public static int EAST = 2;
     public static int WEST = 3;
     public static int CENTER = 4;
-    private static final Dimension ZERO = new Dimension(0, 0);
+    private static final Rectangle ZERO = new Rectangle(0, 0);
 
     @Override
     public Dimension preferredLayout(RObject object, Graphics graphics) {
-        Dimension north = this.north == null ? ZERO : this.north.getPreferredShape(graphics);
-        Dimension south = this.south == null ? ZERO : this.south.getPreferredShape(graphics);
-        Dimension east = this.east == null ? ZERO : this.east.getPreferredShape(graphics);
-        Dimension west = this.west == null ? ZERO : this.west.getPreferredShape(graphics);
-        Dimension center = this.center == null ? ZERO : this.center.getPreferredShape(graphics);
-        int maxX = Math.max(Math.max(north.width, south.width), east.width + west.width + center.width);
-        int maxY = north.height + south.height + Math.max(Math.max(west.height, east.height), center.height);
+        RectangularShape north = this.north == null ? ZERO : this.north.getPreferredShape(graphics);
+        RectangularShape south = this.south == null ? ZERO : this.south.getPreferredShape(graphics);
+        RectangularShape east = this.east == null ? ZERO : this.east.getPreferredShape(graphics);
+        RectangularShape west = this.west == null ? ZERO : this.west.getPreferredShape(graphics);
+        RectangularShape center = this.center == null ? ZERO : this.center.getPreferredShape(graphics);
+        int maxX = (int) Math.max(Math.max(north.getWidth(), south.getWidth()), east.getWidth() + west.getWidth() + center.getWidth());
+        int maxY = (int) (north.getHeight() + south.getHeight() + Math.max(Math.max(west.getHeight(), east.getHeight()), center.getHeight()));
         return new Dimension(maxX, maxY);
     }
 
     @Override
     public Dimension minimumLayout(RObject object, Graphics graphics) {
-        Dimension north = this.north == null ? ZERO : this.north.getMinimumShape(graphics);
-        Dimension south = this.south == null ? ZERO : this.south.getMinimumShape(graphics);
-        Dimension east = this.east == null ? ZERO : this.east.getMinimumShape(graphics);
-        Dimension west = this.west == null ? ZERO : this.west.getMinimumShape(graphics);
-        Dimension center = this.center == null ? ZERO : this.center.getMinimumShape(graphics);
-        int maxX = Math.max(Math.max(north.width, south.width), east.width + west.width + center.width);
-        int maxY = north.height + south.height + Math.max(Math.max(west.height, east.height), center.height);
+        RectangularShape north = this.north == null ? ZERO : this.north.getMinimumShape(graphics);
+        RectangularShape south = this.south == null ? ZERO : this.south.getMinimumShape(graphics);
+        RectangularShape east = this.east == null ? ZERO : this.east.getMinimumShape(graphics);
+        RectangularShape west = this.west == null ? ZERO : this.west.getMinimumShape(graphics);
+        RectangularShape center = this.center == null ? ZERO : this.center.getMinimumShape(graphics);
+        int maxX = (int) Math.max(Math.max(north.getWidth(), south.getWidth()), east.getWidth() + west.getWidth() + center.getWidth());
+        int maxY = (int) (north.getHeight() + south.getHeight() + Math.max(Math.max(west.getHeight(), east.getHeight()), center.getHeight()));
         return new Dimension(maxX, maxY);
     }
 
     @Override
     public Dimension layout(RObject object, Graphics graphics) {
-        Dimension north = this.north == null ? ZERO : this.north.getShape(graphics);
-        Dimension south = this.south == null ? ZERO : this.south.getShape(graphics);
-        Dimension east = this.east == null ? ZERO : this.east.getShape(graphics);
-        Dimension west = this.west == null ? ZERO : this.west.getShape(graphics);
-        Dimension center = this.center == null ? ZERO : this.center.getShape(graphics);
-        int maxX = Math.max(Math.max(north.width, south.width), east.width + west.width + center.width);
-        int maxY = north.height + south.height + Math.max(Math.max(west.height, east.height), center.height);
+        RectangularShape north = this.north == null ? ZERO : this.north.getShape(graphics);
+        RectangularShape south = this.south == null ? ZERO : this.south.getShape(graphics);
+        RectangularShape east = this.east == null ? ZERO : this.east.getShape(graphics);
+        RectangularShape west = this.west == null ? ZERO : this.west.getShape(graphics);
+        RectangularShape center = this.center == null ? ZERO : this.center.getShape(graphics);
+        int maxX = (int) Math.max(Math.max(north.getWidth(), south.getWidth()), east.getWidth() + west.getWidth() + center.getWidth());
+        int maxY = (int) (north.getHeight() + south.getHeight() + Math.max(Math.max(west.getHeight(), east.getHeight()), center.getHeight()));
         return new Dimension(maxX, maxY);
     }
 

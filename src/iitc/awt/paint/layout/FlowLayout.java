@@ -3,6 +3,7 @@ package iitc.awt.paint.layout;
 import iitc.awt.paint.RObject;
 
 import java.awt.*;
+import java.awt.geom.RectangularShape;
 
 /**
  * FlowLayout
@@ -48,13 +49,13 @@ public class FlowLayout extends AbstractLayout {
         boolean noLeftNeighbor = true;
         for (RObject c : object.getObjects()) {
             if (c.isVisible()) {
-                Dimension d = c.getPreferredShape(graphics);
-                dim.height = Math.max(dim.height, d.height);
+                RectangularShape shape = c.getPreferredShape(graphics);
+                dim.height = Math.max(dim.height, (int) shape.getHeight());
                 if (noLeftNeighbor)
                     noLeftNeighbor = false;
                 else
                     dim.width += hgap;
-                dim.width += d.width;
+                dim.width += shape.getWidth();
             }
         }
         Insets insets = object.getInsets();
@@ -69,13 +70,13 @@ public class FlowLayout extends AbstractLayout {
         boolean noLeftNeighbor = true;
         for (RObject c : object.getObjects())
             if (c.isVisible()) {
-                Dimension d = c.getMinimumShape(graphics);
-                dim.height = Math.max(dim.height, d.height);
+                RectangularShape shape = c.getMinimumShape(graphics);
+                dim.height = Math.max(dim.height, (int) shape.getHeight());
                 if (noLeftNeighbor)
                     noLeftNeighbor = false;
                 else
                     dim.width += hgap;
-                dim.width += d.width;
+                dim.width += shape.getWidth();
             }
         Insets insets = object.getInsets();
         dim.width += insets.left + insets.right + hgap * 2;
@@ -89,13 +90,13 @@ public class FlowLayout extends AbstractLayout {
         boolean noLeftNeighbor = true;
         for (RObject c : object.getObjects())
             if (c.isVisible()) {
-                Dimension d = c.getShape(graphics);
-                dim.height = Math.max(dim.height, d.height);
+                RectangularShape shape = c.getShape(graphics);
+                dim.height = Math.max(dim.height, (int) shape.getHeight());
                 if (noLeftNeighbor)
                     noLeftNeighbor = false;
                 else
                     dim.width += hgap;
-                dim.width += d.width;
+                dim.width += shape.getWidth();
             }
         Insets insets = object.getInsets();
         dim.width += insets.left + insets.right + hgap * 2;
@@ -107,7 +108,6 @@ public class FlowLayout extends AbstractLayout {
     public void doLayout(RObject object, Graphics graphics) {
         //TODO:Implement multi-row support for oversized child objects
         Insets insets = object.getInsets();
-        Dimension size = object.getShape(graphics);
         Dimension uptake = layout(object, graphics);
         //strip irrelevant gaps to get proper size
         uptake.setSize(uptake.width - (insets.left + insets.right + hgap * 2), uptake.height - (insets.top + insets.bottom + vgap * 2));
@@ -117,10 +117,10 @@ public class FlowLayout extends AbstractLayout {
                 leftX += insets.left;
                 break;
             case CENTER:
-                leftX += ((size.width - uptake.width) / 2);
+                leftX += ((object.getWidth() - uptake.width) / 2);
                 break;
             case RIGHT:
-                leftX += (size.width - insets.right - uptake.width);
+                leftX += (object.getWidth() - insets.right - uptake.width);
                 break;
         }
         int topY = insets.top;

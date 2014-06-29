@@ -3,6 +3,7 @@ package iitc.awt.paint.layout;
 import iitc.awt.paint.RObject;
 
 import java.awt.*;
+import java.awt.geom.RectangularShape;
 
 /**
  * VerticalFlowLayout
@@ -48,13 +49,13 @@ public class VerticalFlowLayout extends AbstractLayout {
         boolean noTopNeighbor = true;
         for (RObject c : object.getObjects()) {
             if (c.isVisible()) {
-                Dimension d = c.getPreferredShape(graphics);
-                dim.height = Math.max(dim.height, d.height);
+                RectangularShape shape = c.getPreferredShape(graphics);
+                dim.height = Math.max(dim.height, (int) shape.getHeight());
                 if (noTopNeighbor)
                     noTopNeighbor = false;
                 else
                     dim.height += vgap;
-                dim.width += d.width;
+                dim.width += shape.getHeight();
             }
         }
         Insets insets = object.getInsets();
@@ -69,13 +70,13 @@ public class VerticalFlowLayout extends AbstractLayout {
         boolean noTopNeighbor = true;
         for (RObject c : object.getObjects()) {
             if (c.isVisible()) {
-                Dimension d = c.getMinimumShape(graphics);
-                dim.height = Math.max(dim.height, d.height);
+                RectangularShape shape = c.getMinimumShape(graphics);
+                dim.height = Math.max(dim.height, (int) shape.getHeight());
                 if (noTopNeighbor)
                     noTopNeighbor = false;
                 else
                     dim.height += vgap;
-                dim.width += d.width;
+                dim.width += shape.getWidth();
             }
         }
         Insets insets = object.getInsets();
@@ -90,13 +91,13 @@ public class VerticalFlowLayout extends AbstractLayout {
         boolean noTopNeighbor = true;
         for (RObject c : object.getObjects()) {
             if (c.isVisible()) {
-                Dimension d = c.getShape(graphics);
-                dim.height = Math.max(dim.height, d.height);
+                RectangularShape shape = c.getShape(graphics);
+                dim.height = Math.max(dim.height, (int) shape.getHeight());
                 if (noTopNeighbor)
                     noTopNeighbor = false;
                 else
                     dim.height += vgap;
-                dim.width += d.width;
+                dim.width += shape.getHeight();
             }
         }
         Insets insets = object.getInsets();
@@ -109,7 +110,6 @@ public class VerticalFlowLayout extends AbstractLayout {
     public void doLayout(RObject object, Graphics graphics) {
         //TODO:Implement multi-column support for oversized child objects
         Insets insets = object.getInsets();
-        Dimension size = object.getShape(graphics);
         Dimension uptake = layout(object, graphics);
         //strip irrelevant gaps to get proper size
         uptake.setSize(uptake.width - (insets.left + insets.right + hgap * 2), uptake.height - (insets.top + insets.bottom + vgap * 2));
@@ -120,10 +120,10 @@ public class VerticalFlowLayout extends AbstractLayout {
                 topY += insets.top;
                 break;
             case CENTER:
-                topY += ((size.height - uptake.height) / 2);
+                topY += ((object.getHeight() - uptake.height) / 2);
                 break;
             case BOTTOM:
-                topY += (size.height - uptake.height - insets.bottom);
+                topY += (object.getHeight() - uptake.height - insets.bottom);
                 break;
         }
         for (RObject child : object.getObjects()) {
